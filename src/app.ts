@@ -14,6 +14,8 @@ import configureHandlebars from './configs/handlebars';
 
 import SECRED_KEYS from './configs/secred_keys';
 import configureDatabase from "./configs/database";
+import clientRouter from "./routes/clientRouter";
+import authRouter from "./routes/authRouter";
 
 
 const app = express();
@@ -36,8 +38,20 @@ app.use(session({
 
 app.use(csrf());
 
+app.use(clientRouter);
+app.use(authRouter);
+// app.use(404);
+// app.use(500);
 
-
+declare global {
+  namespace Express {
+      interface Request {
+          // user?: User;
+          // isLoggedIn: boolean;
+          // csrfToken: ()=>string; 
+      }
+  }
+}
 declare module 'express-session' {
   interface SessionData {
     // views: number;
