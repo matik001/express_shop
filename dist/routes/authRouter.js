@@ -1,12 +1,10 @@
-import { Router } from "express";
-import { body } from "express-validator";
-import { getLogin, getRegister } from "../controllers/authController";
-const authRouter = Router();
-
-
-authRouter.get('/register',getRegister);
-authRouter.get('/login', getLogin);
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var authController_1 = require("../controllers/authController");
+var authRouter = express_1.Router();
+authRouter.get('/register', authController_1.getRegister);
+authRouter.get('/login', authController_1.getLogin);
 // authRouter.get('/login', isNotAuth('/'), getLogin);
 // authRouter.post('/login', isNotAuth('/'),[
 //     body('email')
@@ -17,7 +15,6 @@ authRouter.get('/login', getLogin);
 // ], postLogin);
 // authRouter.post('/logout', isAuth, postLogout);
 // authRouter.get('/signup', isNotAuth('/'), getSignup);
-
 // authRouter.post('/signup', isNotAuth('/'), [
 //     body('email')
 //         .trim()
@@ -30,7 +27,6 @@ authRouter.get('/login', getLogin);
 //             return true;
 //         })
 //         .normalizeEmail(),
-
 //     body('password')
 //         .trim()
 //         .isLength({min: 5}).withMessage("Password should have at least 5 characters")
@@ -40,10 +36,9 @@ authRouter.get('/login', getLogin);
 //     body('confirmPassword')
 //         .trim()
 // ], postSignup);
-
 // authRouter.get('/reset-password', getResetPassword);
 // authRouter.post('/reset-password', postResetPassword);
 // authRouter.get('/new-password/:token', isNotAuth('/'), getNewPassword);
 // authRouter.post('/new-password', isNotAuth('/'), postNewPassword);
-
-export default authRouter;
+exports.default = authRouter;
+//# sourceMappingURL=authRouter.js.map

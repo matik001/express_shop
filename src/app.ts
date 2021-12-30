@@ -1,8 +1,6 @@
 import "reflect-metadata";
 import express from 'express';
 import bodyParser from 'body-parser';
-import multer from 'multer';
-import path from 'path';
 import session from 'express-session';
 import sessionFileStore from 'session-file-store'; 
 const FileStore = sessionFileStore(session);
@@ -10,12 +8,12 @@ const FileStore = sessionFileStore(session);
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import configureHandlebars from './configs/handlebars';
-
-
 import SECRED_KEYS from './configs/secred_keys';
 import configureDatabase from "./configs/database";
 import clientRouter from "./routes/clientRouter";
 import authRouter from "./routes/authRouter";
+import catch404 from "./middleware/catch404";
+import catch500 from "./middleware/catch500";
 
 
 const app = express();
@@ -40,8 +38,8 @@ app.use(csrf());
 
 app.use(clientRouter);
 app.use(authRouter);
-// app.use(404);
-// app.use(500);
+app.use(catch404);
+app.use(catch500);
 
 declare global {
   namespace Express {

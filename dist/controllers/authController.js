@@ -35,61 +35,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var express_session_1 = __importDefault(require("express-session"));
-var session_file_store_1 = __importDefault(require("session-file-store"));
-var FileStore = session_file_store_1.default(express_session_1.default);
-var csurf_1 = __importDefault(require("csurf"));
-var cookie_parser_1 = __importDefault(require("cookie-parser"));
-var handlebars_1 = __importDefault(require("./configs/handlebars"));
-var secred_keys_1 = __importDefault(require("./configs/secred_keys"));
-var database_1 = __importDefault(require("./configs/database"));
-var clientRouter_1 = __importDefault(require("./routes/clientRouter"));
-var authRouter_1 = __importDefault(require("./routes/authRouter"));
-var catch404_1 = __importDefault(require("./middleware/catch404"));
-var catch500_1 = __importDefault(require("./middleware/catch500"));
-var app = express_1.default();
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-handlebars_1.default(app);
-app.set('views', './views');
-app.use(express_1.default.static('./static'));
-app.use(cookie_parser_1.default());
-app.use(express_session_1.default({
-    store: new FileStore({}),
-    secret: secred_keys_1.default.SESSION,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-}));
-app.use(csurf_1.default());
-app.use(clientRouter_1.default);
-app.use(authRouter_1.default);
-app.use(catch404_1.default);
-app.use(catch500_1.default);
-var start = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+exports.getRegister = exports.getLogin = void 0;
+var responseHelpers_1 = require("../utils/responseHelpers");
+exports.getLogin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, database_1.default()];
-            case 1:
-                _a.sent();
-                app.listen(3000);
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                console.log(error_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+        responseHelpers_1.renderHelper(req, res, 'login', {
+            title: "Login",
+            activeNav: 'login',
+        });
+        return [2 /*return*/];
     });
 }); };
-start();
-//# sourceMappingURL=app.js.map
+exports.getRegister = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        responseHelpers_1.renderHelper(req, res, 'register', {
+            title: "Register",
+            activeNav: 'register',
+        });
+        return [2 /*return*/];
+    });
+}); };
+//# sourceMappingURL=authController.js.map
