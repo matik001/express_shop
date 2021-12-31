@@ -12,8 +12,15 @@ var configureHandlebars = function (app) {
             ternary: function (cond, ifTrue, ifFalse) {
                 return cond ? ifTrue : ifFalse;
             },
-            compare: function (a, b) {
+            eq: function (a, b) {
                 return a === b;
+            },
+            section: function (name, options) {
+                if (!this._sections) {
+                    this._sections = {};
+                }
+                this._sections[name] = options.fn(this);
+                return null;
             }
             // bar() { return 'BAR!'; }
         }

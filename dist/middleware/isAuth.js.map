@@ -1,1 +1,1 @@
-{"version":3,"file":"isAuth.js","sourceRoot":"","sources":["../../src/middleware/isAuth.ts"],"names":[],"mappings":";;AAEA,mBAAe,UAAC,GAAW,EAAE,GAAY,EAAE,IAAiB;IACxD,iBAAiB;IACjB,qCAAqC;IACrC,IAAI;IACJ,IAAI,EAAE,CAAC;AACX,CAAC,EAAA"}
+{"version":3,"file":"isAuth.js","sourceRoot":"","sources":["../../src/middleware/isAuth.ts"],"names":[],"mappings":";;AAEA,mBAAe,UAAC,GAAW,EAAE,GAAY,EAAE,IAAiB;IACxD,IAAG,CAAC,GAAG,CAAC,IAAI,EAAC;QACT,OAAO,GAAG,CAAC,QAAQ,CAAC,sBAAoB,GAAG,CAAC,GAAK,CAAC,CAAC;KACtD;IACD,IAAI,EAAE,CAAC;AACX,CAAC,EAAA"}

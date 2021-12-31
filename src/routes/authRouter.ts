@@ -1,45 +1,50 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { getLogin, getRegister } from "../controllers/authController";
+import { getDb } from "../configs/database";
+import { getLogin, getRegister, postLogin, postLogout, postRegister } from "../controllers/authController";
+import { User } from "../entity/user";
+import isAuth from "../middleware/isAuth";
+import isNotAuth from "../middleware/isNotAuth";
 const authRouter = Router();
 
 
-authRouter.get('/register',getRegister);
-authRouter.get('/login', getLogin);
+authRouter.get('/login', isNotAuth(), getLogin);
+authRouter.post('/login', isNotAuth('/'),[
+    body('email')
+        .trim()
+        .normalizeEmail(),
+    body('password')
+        .trim()
+    ], postLogin, getLogin);
+    
 
-// authRouter.get('/login', isNotAuth('/'), getLogin);
-// authRouter.post('/login', isNotAuth('/'),[
-//     body('email')
-//         .trim()
-//         .normalizeEmail(),
-//     body('password')
-//         .trim()
-// ], postLogin);
-// authRouter.post('/logout', isAuth, postLogout);
-// authRouter.get('/signup', isNotAuth('/'), getSignup);
+authRouter.get('/register', isNotAuth(), getRegister);
 
-// authRouter.post('/signup', isNotAuth('/'), [
-//     body('email')
-//         .trim()
-//         .isEmail().withMessage("Email is invalid")
-//         .bail()
-//         .custom(async (value)=>{
-//             const user = await User.findOne({email: value});
-//             if(user)
-//                 throw new Error('Email exists already');
-//             return true;
-//         })
-//         .normalizeEmail(),
+authRouter.post('/register', isNotAuth(), [
+    body('email')
+        .trim()
+        .isEmail().withMessage("Email is invalid")
+        .bail()
+        .custom(async (value)=>{
+            const user = await getDb().getRepository(User).findOne({ email: value});
+            if(user)
+                throw new Error('Email already exists');
+            return true;
+        })
+        .normalizeEmail(),
 
-//     body('password')
-//         .trim()
-//         .isLength({min: 5}).withMessage("Password should have at least 5 characters")
-//         .isAlphanumeric().withMessage("Password may only consist of text and digits")
-//         .custom((value, {req}) => value===req.body!.confirmPassword )
-//             .withMessage("Passwords are different"),
-//     body('confirmPassword')
-//         .trim()
-// ], postSignup);
+    body('password')
+        .trim()
+        .isLength({min: 5}).withMessage("Password should have at least 5 characters")
+        .isAlphanumeric().withMessage("Password may only consist of text and digits"),
+
+    body('confirmPassword')
+        .trim()
+        .custom((value, {req}) => value===req.body!.password )
+        .withMessage("Passwords are different")
+], postRegister, getRegister);
+
+authRouter.post('/logout', isAuth, postLogout);
 
 // authRouter.get('/reset-password', getResetPassword);
 // authRouter.post('/reset-password', postResetPassword);

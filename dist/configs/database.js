@@ -36,26 +36,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDb = exports.configureDatabase = void 0;
 var typeorm_1 = require("typeorm");
-var user_1 = require("../entity/user");
-var configureDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var connection, user;
+var dbConnection = null;
+exports.configureDatabase = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, typeorm_1.createConnection()];
             case 1:
-                connection = _a.sent();
-                user = new user_1.User();
-                user.firstName = "Timber";
-                user.lastName = "Saw";
-                user.age = 25;
-                return [4 /*yield*/, connection.manager.save(user)];
-            case 2:
-                _a.sent();
-                console.log("Saved a new user with id: " + user.id);
+                dbConnection = _a.sent();
+                console.log("Connected to database");
                 return [2 /*return*/];
         }
     });
 }); };
-exports.default = configureDatabase;
+exports.getDb = function () {
+    return dbConnection;
+};
 //# sourceMappingURL=database.js.map

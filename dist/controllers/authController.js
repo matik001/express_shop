@@ -35,9 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRegister = exports.getLogin = void 0;
+exports.postLogout = exports.postRegister = exports.getRegister = exports.postLogin = exports.getLogin = void 0;
+var database_1 = require("../configs/database");
+var user_1 = require("../entity/user");
 var responseHelpers_1 = require("../utils/responseHelpers");
+var bcrypt_1 = __importDefault(require("bcrypt"));
 exports.getLogin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         responseHelpers_1.renderHelper(req, res, 'login', {
@@ -47,11 +53,106 @@ exports.getLogin = function (req, res, next) { return __awaiter(void 0, void 0, 
         return [2 /*return*/];
     });
 }); };
+exports.postLogin = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, user, validPassword;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, database_1.getDb().getRepository(user_1.User).findOne({
+                        where: { email: email }
+                    })];
+            case 1:
+                user = _b.sent();
+                if (!user) return [3 /*break*/, 3];
+                return [4 /*yield*/, bcrypt_1.default.compare(password, user.password)];
+            case 2:
+                validPassword = _b.sent();
+                if (validPassword) {
+                    req.session.userId = user.id;
+                    req.session.save(function (err) {
+                        var _a;
+                        console.log(err);
+                        res.redirect((_a = req.query.returnUrl) !== null && _a !== void 0 ? _a : '/');
+                    });
+                    return [2 /*return*/];
+                }
+                _b.label = 3;
+            case 3:
+                res.locals.oldInput = {
+                    email: email,
+                    password: password,
+                };
+                res.locals.error = "Wrong email or password";
+                next();
+                return [2 /*return*/];
+        }
+    });
+}); };
 exports.getRegister = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         responseHelpers_1.renderHelper(req, res, 'register', {
             title: "Register",
             activeNav: 'register',
+        });
+        return [2 /*return*/];
+    });
+}); };
+exports.postRegister = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, fullname, password, confirmPassword, errors, salt, user, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, email = _a.email, fullname = _a.fullname, password = _a.password, confirmPassword = _a.confirmPassword;
+                errors = responseHelpers_1.getValidationErrors(req);
+                if (Object.keys(errors).length) {
+                    res.locals.errors = errors;
+                    res.locals.oldInput = {
+                        email: email,
+                        fullname: fullname,
+                        password: password,
+                        confirmPassword: confirmPassword
+                    };
+                    return [2 /*return*/, next()];
+                }
+                return [4 /*yield*/, bcrypt_1.default.genSalt(10)];
+            case 1:
+                salt = _c.sent();
+                _b = {
+                    email: email,
+                    fullname: fullname
+                };
+                return [4 /*yield*/, bcrypt_1.default.hash(password, salt)];
+            case 2:
+                user = (_b.password = _c.sent(),
+                    _b);
+                return [4 /*yield*/, database_1.getDb().getRepository(user_1.User).save(user)];
+            case 3:
+                _c.sent();
+                // const msg = {
+                //     to: email,
+                //     from: 'mateusz.kisiel.mk@gmail.com',
+                //     subject: 'Confirm your email',
+                //     // text: 'and easy to do anywhere, even with Node.js',
+                //     html: '<strong>Click to confirm your email</strong>',
+                // };
+                // sendgrid.send(msg).catch(error=>console.log(error));
+                req.session.userId = user.id;
+                req.session.save(function (err) {
+                    var _a;
+                    res.redirect((_a = req.query.returnUrl) !== null && _a !== void 0 ? _a : '/');
+                });
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.postLogout = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        req.session.destroy(function (err) {
+            var _a;
+            if (err)
+                console.log(err);
+            res.redirect((_a = req.query.returnUrl) !== null && _a !== void 0 ? _a : '/');
         });
         return [2 /*return*/];
     });

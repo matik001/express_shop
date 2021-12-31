@@ -9,8 +9,15 @@ const configureHandlebars = (app:express.Express)=>{
                 ternary(cond:boolean, ifTrue:string, ifFalse:string) { 
                     return cond ? ifTrue : ifFalse; 
                 },
-                compare(a:string, b:string){
+                eq(a:string, b:string){
                     return a===b;
+                },
+                section: function (name:string, options:any) {
+                    if (!this._sections) {
+                        this._sections = {};
+                    }
+                    (this._sections as any)[name] = options.fn(this);
+                    return null;
                 }
                 // bar() { return 'BAR!'; }
             }

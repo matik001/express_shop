@@ -1,16 +1,12 @@
-import {createConnection} from "typeorm";
-import { User } from "../entity/user";
+import {Connection, createConnection} from "typeorm";
 
-const configureDatabase = async ()=>{
-    const connection = await createConnection();
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-    user.age = 25;
+var dbConnection:Connection|null = null;
 
-    await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+export const configureDatabase = async ()=>{
+    dbConnection = await createConnection();
+    console.log("Connected to database");
 }
 
-
-export default configureDatabase;
+export const getDb = ()=>{
+    return dbConnection!;
+}

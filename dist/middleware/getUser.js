@@ -35,65 +35,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var express_session_1 = __importDefault(require("express-session"));
-var session_file_store_1 = __importDefault(require("session-file-store"));
-var FileStore = session_file_store_1.default(express_session_1.default);
-var csurf_1 = __importDefault(require("csurf"));
-var cookie_parser_1 = __importDefault(require("cookie-parser"));
-var handlebars_1 = __importDefault(require("./configs/handlebars"));
-var secred_keys_1 = __importDefault(require("./configs/secred_keys"));
-var clientRouter_1 = __importDefault(require("./routes/clientRouter"));
-var authRouter_1 = __importDefault(require("./routes/authRouter"));
-var catch404_1 = __importDefault(require("./middleware/catch404"));
-var catch500_1 = __importDefault(require("./middleware/catch500"));
-var catch403_1 = __importDefault(require("./middleware/catch403"));
-var database_1 = require("./configs/database");
-var getUserMiddleware_1 = __importDefault(require("./middleware/getUserMiddleware"));
-var app = express_1.default();
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-handlebars_1.default(app);
-app.set('views', './views');
-app.use(express_1.default.static('./static'));
-app.use(cookie_parser_1.default());
-app.use(express_session_1.default({
-    store: new FileStore({}),
-    secret: secred_keys_1.default.SESSION,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-}));
-app.use(csurf_1.default());
-app.use(getUserMiddleware_1.default);
-app.use(clientRouter_1.default);
-app.use(authRouter_1.default);
-app.use(catch404_1.default);
-app.use(catch403_1.default);
-app.use(catch500_1.default);
-var start = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+var database_1 = require("../configs/database");
+var user_1 = require("../entity/user");
+exports.default = (function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, database_1.configureDatabase()];
+                if (!req.session.userId) return [3 /*break*/, 2];
+                return [4 /*yield*/, database_1.getDb().getRepository(user_1.User).findOne(req.session.userId)];
             case 1:
-                _a.sent();
-                app.listen(3000);
-                return [3 /*break*/, 3];
+                user = _a.sent();
+                if (!user) {
+                    console.log("ERROR: user does not exists!");
+                    req.session.destroy(function (err) {
+                        if (err)
+                            console.log(err);
+                        res.redirect('/');
+                    });
+                    return [2 /*return*/];
+                }
+                req.user = user;
+                _a.label = 2;
             case 2:
-                error_1 = _a.sent();
-                console.log(error_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                next();
+                return [2 /*return*/];
         }
     });
-}); };
-start();
-//# sourceMappingURL=app.js.map
+}); });
+//# sourceMappingURL=getUser.js.map
