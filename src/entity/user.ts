@@ -1,4 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable} from "typeorm";
+import { CartItem } from "./cartItem";
+import { Item } from "./item";
+import { Order } from "./order";
+import { Role } from "./role";
 
 @Entity()
 export class User {
@@ -15,7 +19,19 @@ export class User {
     @Column()
     password: string;
     
-    
+    @OneToMany(type=>Item, item=>item.owner)
+    items: Item[];
+
+    @OneToMany(type=>CartItem, cartItem=>cartItem.owner)
+    cartItems: CartItem[];
+
+    @OneToMany(type=>Order, order=>order.owner)
+    orders: Order[];
+
+    @ManyToMany(type=>Role, role=>role.users)
+    @JoinTable()
+    roles: Role[];
+
     /// date of birth
 }
 

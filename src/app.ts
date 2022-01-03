@@ -31,7 +31,7 @@ app.use(express.static('./static'));
 app.use(cookieParser());
 
 app.use(session({
-  store: new FileStore({}),
+  store: new FileStore({logFn: ()=>{}}),
   secret: SECRED_KEYS.SESSION,
   resave: false,
   saveUninitialized: true,
