@@ -1,0 +1,20 @@
+{{#section 'head'}}
+    <style>
+        .container{
+            width: 80%;
+            display: flex;
+        }      
+        .item{
+            margin: 30px;
+        }  
+    </style>
+{{/section}}
+
+
+<div class="container">
+    {{#each items}}
+        <div class="item">
+            {{> item}}
+        </div>
+    {{/each}}
+</div>

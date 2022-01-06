@@ -6,7 +6,7 @@ import { User } from '../entity/user';
 export default async (req:Request, res:Response, next:NextFunction)=>{
     req.isLoggedIn = false;
     if(req.session!.userId){
-        const user = await getDb().getRepository(User).findOne(req.session!.userId);
+        const user = await getDb().getRepository(User).findOne(req.session!.userId, {relations: ['roles']});
         if (!user) {
             console.log("ERROR: user does not exists!");
             req.session.destroy((err)=>{

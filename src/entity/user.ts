@@ -20,13 +20,13 @@ export class User {
     password: string;
     
     @OneToMany(type=>Item, item=>item.owner)
-    items: Item[];
+    items: Promise<Item[]>;
 
     @OneToMany(type=>CartItem, cartItem=>cartItem.owner)
-    cartItems: CartItem[];
+    cartItems: Promise<CartItem[]>;
 
     @OneToMany(type=>Order, order=>order.owner)
-    orders: Order[];
+    orders: Promise<Order[]>;
 
     @ManyToMany(type=>Role, role=>role.users)
     @JoinTable()

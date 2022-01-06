@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, OneToMany, RelationOptions} from "typeorm";
 import { CartItem } from "./cartItem";
 import { OrderItem } from "./orderItem";
 import { User } from "./user";
@@ -21,6 +21,8 @@ export class Item {
     @Column()
     imageUrl: string;
 
+    @Column({default: false})
+    deleted: boolean = false;
 
     @ManyToOne(type=>User, user=>user.items)
     owner: User;
@@ -31,6 +33,7 @@ export class Item {
     @OneToMany(type=>CartItem, cartItem=>cartItem.item)
     cartItems: CartItem[];
     
+
     
 }
 

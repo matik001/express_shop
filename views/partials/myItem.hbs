@@ -1,0 +1,27 @@
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src={{imageUrl}}>
+    <div class="card-body">
+        <h5 class="card-title">{{name}}</h5>
+        <p class="card-text">{{description}}.</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Price: {{price}}</li>
+    </ul>
+    <div class="card-body" style="display: flex; flex-direction: row; justify-content: space-evenly;">
+        <a href="/admin/edit-item/{{id}}">
+            <button class="btn btn-primary">
+                <i class="fas fa-edit"></i>
+                Edit
+            </button>
+        </a>
+        <form action="/admin/delete-item/{{id}}" method="post">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+                Delete
+            </button>
+        </form>
+    </div>
+
+</div>
+

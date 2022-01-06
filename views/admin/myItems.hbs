@@ -1,0 +1,26 @@
+{{#section 'head'}}
+    <style>
+        .container{
+            width: 80%;
+            display: flex;
+        }      
+        .item{
+            margin: 30px;
+        }  
+    </style>
+{{/section}}
+
+
+<div class="container">
+    {{#each items}}
+        <div class="item">
+            {{> myItem csrfToken=../csrfToken}}
+        </div>
+    {{/each}}
+</div>
+
+
+
+<a href="/admin/create-item" class="btn btn-info" role="button">
+    <i class="bi bi-plus"></i> Create
+</a>

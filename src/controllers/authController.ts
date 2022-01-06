@@ -8,8 +8,7 @@ import session from "express-session";
 export const getLogin = async (req: Request, res: Response, next: NextFunction) => {
     renderHelper(req, res, 'login',{
         title: "Login",
-        activeNav: 'login',
-        // products: products,
+        returnUrl: req.query.returnUrl as string ?? '/'
     });
 }
 export const postLogin = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +39,6 @@ export const postLogin = async (req: Request, res: Response, next: NextFunction)
 export const getRegister = async (req: Request, res: Response, next: NextFunction) => {
     renderHelper(req, res, 'register',{
         title: "Register",
-        activeNav: 'register',
     });
 }
 export const postRegister = async (req: Request, res: Response, next: NextFunction) => {

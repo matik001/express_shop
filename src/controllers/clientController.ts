@@ -6,15 +6,22 @@
 // import { renderHelper } from "../util/ResponseHelper";
 
 import { NextFunction, Request, Response } from "express";
+import { getDb } from "../configs/database";
+import { Item } from "../entity/item";
 import { renderHelper } from "../utils/responseHelpers";
 
 // //// USERS
 
 export const getIndex = async (req: Request, res: Response, next: NextFunction) => {
-    // const products = await Product.find();
-    renderHelper(req, res, 'items',{
+    const items = await getDb().getRepository(Item).find({
+        where:{
+            deleted: false
+        },
+        relations: ['owner']
+    })
+    renderHelper(req, res, 'user/items',{
         title: "All products",
-        // products: products,
+        items: items,
     });
 };
 
