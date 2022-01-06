@@ -33,7 +33,7 @@ const adminItemsNav = {
 const loginNav = {   
     name: 'Login',
     path: '/login',
-    icon: '<i class="fa fa-fw fa-sign-in"></i>',
+    icon: '<i class="far fa-user"></i>',
     method: 'GET',
     float: 'right'
 } as NavItem;
