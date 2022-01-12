@@ -2,11 +2,12 @@ import { Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { type } from "os";
 import { parse } from "url";
+import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
 import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
 
-type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | "None";
+type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "None";
 interface NavItem{
     name: NavNames;
     path: string;
@@ -45,6 +46,15 @@ const registerNav = {
     method: 'GET',
     float: 'right'
 } as NavItem;
+
+const cartNav = {
+    name: 'Cart',
+    path: '/cart',
+    icon: '<i class="fa fa-shopping-cart"></i>',
+    method: 'GET',
+    float: 'right'
+} as NavItem;
+
 const logoutNav = {   
     name: 'Logout',
     path: '/logout',
@@ -55,17 +65,19 @@ const logoutNav = {
 
 const unauthenticatedNavs = [
     homeNav,
+    registerNav,
     loginNav,
-    registerNav
 ]
 const userNavs = [
     homeNav,
-    logoutNav
+    logoutNav,
+    cartNav,
 ]
 const adminNavs = [
     homeNav,
     adminItemsNav,
-    logoutNav
+    logoutNav,
+    cartNav,
 ]
 
 interface RenderParams{
@@ -73,6 +85,7 @@ interface RenderParams{
     activeNav?: NavNames;
     navItems?: NavItem[];
     items?: Item[];
+    cartItems?: CartItem[];
     item?: Partial<Item>;
     returnUrl?: string;
     edit?: boolean;

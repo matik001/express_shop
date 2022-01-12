@@ -7,7 +7,9 @@
 
 import { NextFunction, Request, Response } from "express";
 import { getDb } from "../configs/database";
+import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
+import { User } from "../entity/user";
 import { renderHelper } from "../utils/responseHelpers";
 
 // //// USERS
@@ -25,74 +27,70 @@ export const getIndex = async (req: Request, res: Response, next: NextFunction) 
     });
 };
 
-// export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
-//     const products = await Product.find();
-//     renderHelper(req, res, 'shop/product-list',{
-//         products: products,
-//         docTitle: 'Products',
-//     });
-// };
+export const getCart = async (req: Request, res: Response, next: NextFunction) => {
+    const cartItems = await getDb().getRepository(CartItem).find({
+        where:{
+            owner: req.user,
+        },
+        relations: ['item']
+    });
+    /// TODO remove items with deleted flag from cart
+    renderHelper(req, res, 'user/cart',{
+        title: "Cart",
+        cartItems: cartItems
+    });
+};
+export const postAddToCart = async (req: Request, res: Response, next: NextFunction) => {
+    const id =  req.params.productId;
+    const item = await getDb().getRepository(Item).findOne(id);
+    if(!item){
+        console.log("ERROR: product not found");
+        res.redirect('/');
+        return;
+    }
+    const newCartItem = (await getDb().getRepository(CartItem).findOne({
+        where:{
+            item: item,
+            owner: req.user
+        }
+    })) ?? {
+        owner: req.user,
+        item: item,
+    } as CartItem;
 
-// export const getProduct = async (req: Request, res: Response, next: NextFunction) => {
-//     const id = req.params.id;
-//     const product = await Product.findById(id);
-//     if (!product) {
-//         console.log("ERROR: shop: getProduct --- product not found");
-//         res.redirect('/');
-//         return;
-//     }
-//     renderHelper(req, res, 'shop/product-detail',{
-//         product: await product,
-//         docTitle: product.title,
-//     });
-// };
+    newCartItem.amount = 1;
 
-// export const getCart = async (req: Request, res: Response, next: NextFunction) => {
-//     const user = (await req.user!
-//         .populate('cart.products.productId')
-//         .execPopulate()) as IUserPopulated;
-//     const cartProducts = user.cart.products;
-//     const price = CartHelper.countPrice(cartProducts);
+    await getDb().getRepository(CartItem).save(newCartItem);
 
-//     renderHelper(req, res, 'shop/cart',{
-//         docTitle: 'My Cart',
-//         products: cartProducts,
-//         price: price
-//     });
-// };
-// export const postCart = async (req: Request, res: Response, next: NextFunction) => {
-//     const id =  req.body.productId;
-//     const product = await Product.findById(id);
-//     if(!product){
-//         console.log("ERROR: shop: postCart --- product not found");
-//         res.redirect('/');
-//         return;
-//     }
-//     await req.user!.addToCart(product);
-//     res.redirect("/cart");
-// };
-// // export const getCheckout = async (req: Request, res: Response, next: NextFunction) => {
-// //     res.render('shop/checkout', {
-// //         // products: await Product.fetchAll(), 
-// //         docTitle: 'My Cart',
-// //         path: '/shop/checkout'
-// //     });
-// // };
+    res.redirect("/cart");
+};
 
+export const postDeleteFromCart = async (req: Request, res: Response, next: NextFunction) => {
+    const productId = req.params.productId;
+    const cartItem = await getDb().getRepository(CartItem).findOne({
+        where:{
+            item: {id: productId},
+            owner: req.user
+        }
+    });
+    if(cartItem)
+        await getDb().getRepository(CartItem).delete(cartItem);
+    res.redirect("/cart");
+}
+export const getCheckout = async (req: Request, res: Response, next: NextFunction) => {
+    const cartItems = await getDb().getRepository(CartItem).find({
+        where:{
+            owner: req.user,
+        },
+        relations: ['item']
+    });
 
+    res.render('user/checkout',{
+        title: 'Checkout',
+        cartItems: cartItems
+    });
+};
 
-
-
-// export const postCartDeleteItem = async (req: Request, res: Response, next: NextFunction) => {
-//     const id = req.body.id;
-//     await req.user!.removeFromCartOne(id);
-//     res.redirect("/cart");
-// }
-// export const postCartDeleteItems = async (req: Request, res: Response, next: NextFunction) => {
-//     const id = req.body.id;
-//     await req.user!.removeFromCartAll(id);
-//     res.redirect("/cart");
-// }
 
 // export const postCreateOrder = async (req: Request, res: Response, next: NextFunction) => {
 //     const user = await req.user!.populate('cart.products.productId').execPopulate() as IUserPopulated;

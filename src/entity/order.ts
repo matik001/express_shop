@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm";
+import { Address } from "./address";
 import { OrderItem } from "./orderItem";
 import { User } from "./user";
 
@@ -20,7 +21,10 @@ export class Order {
     @Column('double precision')
     totalPrice: number;
     
+    @ManyToOne(type=>Address, address=>address.orders)
+    address: Address;
     
+
     @ManyToOne(type=>User, user=>user.items)
     owner: User;
 

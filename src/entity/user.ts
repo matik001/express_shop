@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable} from "typeorm";
+import { Address } from "./address";
 import { CartItem } from "./cartItem";
 import { Item } from "./item";
 import { Order } from "./order";
@@ -27,6 +28,9 @@ export class User {
 
     @OneToMany(type=>Order, order=>order.owner)
     orders: Promise<Order[]>;
+
+    @OneToMany(type=>Address, order=>order.owner)
+    addresses: Promise<Address[]>;
 
     @ManyToMany(type=>Role, role=>role.users)
     @JoinTable()
