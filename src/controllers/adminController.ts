@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Like } from "typeorm";
 import { getDb } from "../configs/database";
 import { Item } from "../entity/item";
+import { User } from "../entity/user";
 import { renderHelper } from "../utils/responseHelpers";
 
 
@@ -104,4 +105,15 @@ export const postEditItem = async (req: Request, res: Response, next: NextFuncti
     await getDb().getRepository(Item).save(item);
 
    res.redirect('/admin')
+};
+
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    const users = await getDb().getRepository(User).find({
+        relations: ['roles']
+    });
+
+    renderHelper(req, res, 'admin/users',{
+        title: "Users",
+        users: users,
+    });
 };

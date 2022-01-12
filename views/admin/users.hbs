@@ -1,0 +1,16 @@
+{{#section 'head'}}
+    <style>
+
+    </style>
+{{/section}}
+
+
+
+{{#each users}}
+    {{fullname}} {{email}} 
+    Roles:
+    {{#each roles}}
+        {{name}}
+    {{/each}}
+    <br>
+{{/each}}

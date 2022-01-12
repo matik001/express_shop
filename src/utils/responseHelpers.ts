@@ -4,10 +4,11 @@ import { type } from "os";
 import { parse } from "url";
 import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
+import { User } from "../entity/user";
 import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
 
-type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "None";
+type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "None";
 interface NavItem{
     name: NavNames;
     path: string;
@@ -55,6 +56,15 @@ const cartNav = {
     float: 'right'
 } as NavItem;
 
+const usersNav = {
+    name: 'Users',
+    path: '/admin/users',
+    icon: '<i class="fas fa-users"></i>',
+    method: 'GET',
+    float: 'left'
+} as NavItem;
+
+
 const logoutNav = {   
     name: 'Logout',
     path: '/logout',
@@ -76,6 +86,7 @@ const userNavs = [
 const adminNavs = [
     homeNav,
     adminItemsNav,
+    usersNav,
     logoutNav,
     cartNav,
 ]
@@ -89,6 +100,7 @@ interface RenderParams{
     item?: Partial<Item>;
     returnUrl?: string;
     edit?: boolean;
+    users?: User[];
 }
 export const renderHelper = (req: Request, res: Response, view: string, args: RenderParams) => {
     const isAdmin = req.user?.roles.some(a=>a.id === Roles.Admin) ?? false;

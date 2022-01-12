@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
 import { imageStorage } from "../configs/multer";
-import { getCreateItem, getIndex, postCreateItem, postDeleteItem, getEditItem, postEditItem } from "../controllers/adminController";
+import { getCreateItem, getIndex, postCreateItem, postDeleteItem, getEditItem, postEditItem, getUsers } from "../controllers/adminController";
 import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
 const adminRouter = Router();
@@ -28,5 +28,6 @@ postCreateItem);
 adminRouter.post('/delete-item/:itemId', hasRole(Roles.Admin), postDeleteItem);
 adminRouter.get('/edit-item/:itemId', hasRole(Roles.Admin), getEditItem);
 adminRouter.post('/edit-item/:itemId', hasRole(Roles.Admin), upload.single('imageUrl'), postEditItem);
+adminRouter.get('/users', hasRole(Roles.Admin), getUsers);
 
 export default adminRouter;
