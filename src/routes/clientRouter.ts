@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { body, query } from "express-validator";
 import { getCart, getIndex, postAddToCart, postDeleteFromCart } from "../controllers/clientController";
 const clientRouter = Router();
 

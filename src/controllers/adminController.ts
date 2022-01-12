@@ -1,14 +1,26 @@
 import { NextFunction, Request, Response } from "express";
+import { Like } from "typeorm";
 import { getDb } from "../configs/database";
 import { Item } from "../entity/item";
 import { renderHelper } from "../utils/responseHelpers";
 
 
 export const getIndex = async (req: Request, res: Response, next: NextFunction) => {
+    const phrase = req.query['phrase'] ?? '';
     const myItems = await getDb().getRepository(Item).find({
-        owner: req.user,
-        deleted: false
+        where:[{
+            deleted: false,
+            owner: req.user,
+            name: Like(`%${phrase}%`)
+        },
+        {
+            deleted: false,
+            owner: req.user,
+            description: Like(`%${phrase}%`)
+        }],
+        relations: ['owner']
     })
+
     renderHelper(req, res, 'admin/myItems',{
         title: "My items",
         items: myItems,

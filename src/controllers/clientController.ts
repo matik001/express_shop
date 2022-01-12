@@ -6,6 +6,7 @@
 // import { renderHelper } from "../util/ResponseHelper";
 
 import { NextFunction, Request, Response } from "express";
+import { Like } from "typeorm";
 import { getDb } from "../configs/database";
 import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
@@ -15,10 +16,16 @@ import { renderHelper } from "../utils/responseHelpers";
 // //// USERS
 
 export const getIndex = async (req: Request, res: Response, next: NextFunction) => {
+    const phrase = req.query['phrase'] ?? '';
     const items = await getDb().getRepository(Item).find({
-        where:{
-            deleted: false
+        where:[{
+            deleted: false,
+            name: Like(`%${phrase}%`)
         },
+        {
+            deleted: false,
+            description: Like(`%${phrase}%`)
+        }],
         relations: ['owner']
     })
     renderHelper(req, res, 'user/items',{
