@@ -3,6 +3,12 @@ import { Address } from "./address";
 import { OrderItem } from "./orderItem";
 import { User } from "./user";
 
+export const OrderStatuses ={
+    ORDERED: "ordered",
+    SENT: "sent",
+    FINISHED: "finished"
+}
+
 @Entity()
 export class Order {
 
@@ -21,7 +27,7 @@ export class Order {
     @Column('double precision')
     totalPrice: number;
     
-    @ManyToOne(type=>Address, address=>address.orders)
+    @ManyToOne(type=>Address, address=>address.orders, {cascade: ['insert']})
     address: Address;
     
 
@@ -29,7 +35,7 @@ export class Order {
     owner: User;
 
 
-    @OneToMany(type=>OrderItem, orderItem=>orderItem.order)
+    @OneToMany(type=>OrderItem, orderItem=>orderItem.order, {cascade: ['insert']})
     orderItems: OrderItem[];
 
 }

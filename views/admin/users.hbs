@@ -1,16 +1,44 @@
 {{#section 'head'}}
     <style>
-
+        .user-item{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .content-list{
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 {{/section}}
 
+<h2 class="card-title mt-3 mb-4 text-center">Users list</h2>
 
+<div class="content-list">
 
-{{#each users}}
-    {{fullname}} {{email}} 
-    Roles:
-    {{#each roles}}
-        {{name}}
-    {{/each}}
-    <br>
-{{/each}}
+    <table class="table table-light">
+        <thead>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Fullname</th>
+            <th scope="col">Email</th>
+            <th scope="col">Roles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr class="table-light">
+                <th scope="row">{{id}}</th>
+                <td>{{fullname}}</td>
+                <td>{{email}}</td>
+                <td>
+                    {{#each roles}}
+                        <span class="badge rounded-pill bg-primary">{{name}}</span>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

@@ -9,7 +9,7 @@ const FileStore = sessionFileStore(session);
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import configureHandlebars from './configs/handlebars';
-import SECRED_KEYS from './configs/secred_keys';
+import ENV_KEYS from './configs/secred_keys';
 import clientRouter from "./routes/clientRouter";
 import authRouter from "./routes/authRouter";
 import catch404 from "./middleware/catch404";
@@ -34,7 +34,7 @@ app.use(cookieParser());
 
 app.use(session({
   store: new FileStore({logFn: ()=>{}}),
-  secret: SECRED_KEYS.SESSION,
+  secret: ENV_KEYS.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }

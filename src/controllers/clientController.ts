@@ -5,11 +5,15 @@
 // import Order, { IOrder } from "../models/order";
 // import { renderHelper } from "../util/ResponseHelper";
 
+import { ADDRGETNETWORKPARAMS } from "dns";
 import { NextFunction, Request, Response } from "express";
 import { Like } from "typeorm";
 import { getDb } from "../configs/database";
+import { Address } from "../entity/address";
 import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
+import { Order, OrderStatuses } from "../entity/order";
+import { OrderItem } from "../entity/orderItem";
 import { User } from "../entity/user";
 import { renderHelper } from "../utils/responseHelpers";
 
@@ -92,40 +96,76 @@ export const getCheckout = async (req: Request, res: Response, next: NextFunctio
         relations: ['item']
     });
 
-    res.render('user/checkout',{
+    renderHelper(req, res, 'user/checkout',{
         title: 'Checkout',
         cartItems: cartItems
     });
 };
 
+const countPrice = (cartItems:CartItem[])=>{
+    let sum = 0.0;
+    for (const a of cartItems) {
+        sum += (a.amount*a.item.price);
+    }
+    return sum;
+}
+export const postCheckout = async (req: Request, res: Response, next: NextFunction) => {
+    const cartItems = await getDb().getRepository(CartItem).find({
+        where:{
+            owner: req.user,
+        },
+        relations: ['item']
+    });
+    const newOrder = new Order();
+    newOrder.address = {
+        city: "City of Angels",
+        country: "Neverland",
+        street: "JP 2",
+        owner: req.user,
+    } as Address;
+    newOrder.owner = req.user!;
+    newOrder.status = OrderStatuses.ORDERED;
+    newOrder.totalPrice = countPrice(cartItems);
+    newOrder.orderItems = cartItems.map(a=>({
+        amount: a.amount,
+        item: a.item,
+        priceOne: a.item.price,
+    }) as OrderItem);
+    newOrder.date = new Date();
 
-// export const postCreateOrder = async (req: Request, res: Response, next: NextFunction) => {
-//     const user = await req.user!.populate('cart.products.productId').execPopulate() as IUserPopulated;
-
-//     await Order.create({
-//         userId: req.user!._id,
-//         products: user.cart.products.map(p=>({
-//             cnt: p.cnt,
-//             product: {
-//                 price: p.productId.price,
-//                 productId: p.productId._id,
-//                 title: p.productId.title
-//             },
-//         })),
-//         price: CartHelper.countPrice(user.cart.products)
-//     } as IOrder);
-//     await user.removeFromCartAll();
-//     res.redirect('/orders');
-// }
-
-// export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
-//     const orders = await Order.find({userId: req.user!.id})
-//         // .populate('products.product.productId')
-//         .exec();
+    await getDb().getRepository(Order).save(newOrder);
+    await getDb().manager.remove(cartItems);
+    res.redirect('/orders'); /// TODO order id
+};
 
 
-//     renderHelper(req, res, 'shop/orders',{
-//         orders: orders, 
-//         docTitle: 'My orders',
-//     });
-// };
+export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
+    const orders = await getDb().getRepository(Order).find({
+        where:{
+            owner: req.user
+        }
+    })
+
+
+    renderHelper(req, res, 'user/orders',{
+        orders: orders, 
+        title: 'My orders',
+    });
+};
+
+export const getOrder = async (req: Request, res: Response, next: NextFunction) => {
+    const orderId = req.params.orderId;
+
+    const order = await getDb().getRepository(Order).findOne({
+        where:{
+            id: orderId,
+            owner: req.user
+        }
+    })
+
+
+    renderHelper(req, res, 'user/order',{
+        order: order, 
+        title: 'My order',
+    });
+};

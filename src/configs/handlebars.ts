@@ -1,6 +1,6 @@
 import express from 'express';
 import { create } from 'express-handlebars';
-import CONFIG from './config';
+import ENV_KEYS from './secred_keys';
 
 const configureHandlebars = (app:express.Express)=>{
     const hbs = create({
@@ -25,7 +25,7 @@ const configureHandlebars = (app:express.Express)=>{
       
         app.engine('hbs', hbs.engine);
         app.set('view engine', 'hbs');
-        if(CONFIG.isProduction)
+        if(ENV_KEYS.IS_PRODUCTION)
             app.enable('view cache');
 
 }

@@ -4,6 +4,7 @@ import { type } from "os";
 import { parse } from "url";
 import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
+import { Order } from "../entity/order";
 import { User } from "../entity/user";
 import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
@@ -101,6 +102,8 @@ interface RenderParams{
     returnUrl?: string;
     edit?: boolean;
     users?: User[];
+    orders?: Order[];
+    order?: Order;
 }
 export const renderHelper = (req: Request, res: Response, view: string, args: RenderParams) => {
     const isAdmin = req.user?.roles.some(a=>a.id === Roles.Admin) ?? false;

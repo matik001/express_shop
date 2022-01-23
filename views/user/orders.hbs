@@ -1,0 +1,27 @@
+{{#section 'head'}}
+    <style>
+        .container{
+            width: 80%;
+            display: flex;
+        }      
+        .item{
+            margin: 30px;
+        }  
+
+</style>
+{{/section}}
+
+checkout 
+{{#each cartItems}}
+    {{amount}}
+    {{item.name}}
+    {{item.price}}
+    <hr>
+{{/each}}
+
+<form method="post">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <button class="btn btn-primary" type="submit">
+        Finish order
+    </button>
+</form>

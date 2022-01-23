@@ -1,0 +1,28 @@
+pagination
+poprawić wygląd np. przycisk dodania do koszyku bez nazwy, wiekszy
+naprawic edycje przedmiotu
+zarzadzanie adresami
+sprawdzic czy wylapywane sa bledy przez 500
+zabezpieczenie przed ddosem
+
+sprawdzic czy LIKE zabezpiecza przed sql injection
+znalezc hosting bazy danych 
+dodać na heroku
+dodac logowanie googlowskie
+dodac role super user, ktorzy zarzadza wszystkimi userami i wybiera adminow
+dodac opcje blokowania userami
+dodac cart dla niezalogowanych
+
+zrobić stronę cart
+zrobić stronę checkout
+zrobić stronę orders
+zrobić stronę order
+
+dodać prawdziwe płatności (stripe)
+dodać wysyłanie maili i potwierdzenia
+
+dodanie wieku urodzenia
+dodanie odzyskiwania hasla przez maila
+recaptcha
+
+dodać sprzedawanie storytel
