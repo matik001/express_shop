@@ -17,5 +17,6 @@ export class CartItem {
 
     @ManyToOne(type=>Item, item=>item.cartItems)
     item: Item;
+
 }
 

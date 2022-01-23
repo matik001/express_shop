@@ -12,6 +12,13 @@ const configureHandlebars = (app:express.Express)=>{
                 eq(a:string, b:string){
                     return a===b;
                 },
+                add(a:number, b:number){
+                    return a+b;
+                },
+                concat(...args : Array<string>){
+                    args.pop();
+                    return args.join('')
+                },
                 section: function (name:string, options:any) {
                     if (!this._sections) {
                         this._sections = {};

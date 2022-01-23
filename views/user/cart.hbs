@@ -1,14 +1,54 @@
-cart
+{{#section 'head'}}
+<style>
+    .cart-container {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+{{/section}}
+<div class="cart-container mt-4">
+    <div class="list-group">
+        {{#each cartItems}}
+        <div class="list-group-item list-group-item-action">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                <img src="{{item.imageUrl}}" style="max-height: 150px;" />
+                <div class="ml-4">
+                    <div class="d-flex justify-content-between">
+                        <h2 class="mb-1 font-weight-bold">{{item.name}}</h2>
+                    </div>
+                    <p class="mb-1">{{item.description}}</p>
+                    <small class="font-italic">Owner: {{item.owner.fullname}}</small>
+                </div>
+                <div>
+                    <h3 class="text-center">Amount</h3>
+                    {{> plusMinusInput 
+                        csrfToken=../csrfToken
+                        endpoint=(concat "/change-cart-amount/" item.id) }}
+                </div>
+                <div>
+                    <h3 class="text-center font-weight-bold">Price</h3>
+                    <h4 class="text-center">{{priceSum}}</h4>
+                </div>
+                <div>
+                    <form action="/delete-from-cart/{{item.id}}" method="post">
+                        <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                        <button type="submit" class="btn" style="font-size: 34px; color: darkslategray;">
+                            <i class="fa fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-{{#each cartItems}}
-    {{amount}}
-    {{item.name}}
-    {{item.price}}
-    <hr>
-{{/each}}
-
-<form method="get" action="/checkout">
-    <button class="btn  btn-primary" type="submit">
-        <i class="fa fa-shopping-cart"></i> Checkout
-    </button>
-</form>
+        {{/each}}
+    </div>
+    <h3 class="float-right mt-3">
+        Total price: {{totalPrice}}
+    </h3>
+    <form method="get" action="/checkout">
+        <button class="btn  btn-primary  mt-3" type="submit">
+            <i class="fa fa-shopping-cart"></i> Checkout
+        </button>
+    </form>
+</div>

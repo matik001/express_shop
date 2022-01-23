@@ -104,6 +104,8 @@ interface RenderParams{
     users?: User[];
     orders?: Order[];
     order?: Order;
+    phrase?: string;
+    totalPrice?: string;
 }
 export const renderHelper = (req: Request, res: Response, view: string, args: RenderParams) => {
     const isAdmin = req.user?.roles.some(a=>a.id === Roles.Admin) ?? false;

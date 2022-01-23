@@ -20,7 +20,7 @@ import { renderHelper } from "../utils/responseHelpers";
 // //// USERS
 
 export const getIndex = async (req: Request, res: Response, next: NextFunction) => {
-    const phrase = req.query['phrase'] ?? '';
+    const phrase = req.query['phrase'] as string ?? '';
     const items = await getDb().getRepository(Item).find({
         where:[{
             deleted: false,
@@ -35,20 +35,28 @@ export const getIndex = async (req: Request, res: Response, next: NextFunction) 
     renderHelper(req, res, 'user/items',{
         title: "All products",
         items: items,
+        phrase: phrase,
     });
 };
 
 export const getCart = async (req: Request, res: Response, next: NextFunction) => {
-    const cartItems = await getDb().getRepository(CartItem).find({
+    const cartItems = (await getDb().getRepository(CartItem).find({
         where:{
             owner: req.user,
         },
-        relations: ['item']
-    });
+        relations: ['item', 'item.owner']
+    })).map(a=>({
+        ...a,
+        priceSum: `${countPrice([a]).toFixed(2)} zł.`
+    })) as CartItem[];
+
+    const totalPrice = `${countPrice(cartItems).toFixed(2)} zł.`;
+
     /// TODO remove items with deleted flag from cart
     renderHelper(req, res, 'user/cart',{
         title: "Cart",
-        cartItems: cartItems
+        cartItems: cartItems,
+        totalPrice: totalPrice
     });
 };
 export const postAddToCart = async (req: Request, res: Response, next: NextFunction) => {
@@ -169,3 +177,28 @@ export const getOrder = async (req: Request, res: Response, next: NextFunction) 
         title: 'My order',
     });
 };
+
+export const postChangeCartAmount = async (req: Request, res: Response, next: NextFunction) => {
+    const productId = parseInt(req.params.productId);
+    const amount = parseInt(req.body.amount);
+    const item = await getDb().getRepository(Item).findOne(productId);
+
+    const cartItem = (await getDb().getRepository(CartItem).findOne({
+        where:{
+            item: item,
+            owner: req.user
+        }
+    })) as CartItem;
+
+    if(!item || isNaN(amount) || isNaN(productId) || !cartItem){
+        res.redirect('/cart');
+        return;
+    }
+
+    cartItem.amount = amount;
+    await getDb().getRepository(CartItem).save(cartItem);
+
+    res.redirect('/cart'); /// TODO order id
+};
+
+
