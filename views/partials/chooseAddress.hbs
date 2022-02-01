@@ -1,0 +1,54 @@
+<h4>Choose address:</h4>
+{{#each addresses}}
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="address" value="{{this.id}}" id="address{{this.id}}">
+  <label class="form-check-label" for="address{{this.id}}">
+    {{this}}
+  </label>
+</div>
+{{/each}}
+
+<div class="form-check">
+  <input class="form-check-input" type="radio" id="addressNewRadio" name="address" value="new">
+  <label class="form-check-label" for="addressNewRadio">
+    Add new
+  </label>
+</div>
+
+
+<div class="row g-3 mt-3" id="newAddressForm" style="display: none;">
+  <div class="col-12">
+    <label for="inputPhone" class="form-label">Phone number</label>
+    <input type="text" class="form-control" id="inputPhone" name="phone" placeholder="123 123 123">
+  </div>
+  <div class="col-12">
+    <label for="inputStreet" class="form-label">Street and number</label>
+    <input type="text" class="form-control" id="inputStreet"  name="street" placeholder="1234 Main St">
+  </div>
+  <div class="col-md-6">
+    <label for="inputCity" class="form-label">City</label>
+    <input type="text" class="form-control" id="inputCity" name="city">
+  </div>
+  <div class="col-md-2">
+    <label for="inputZip" class="form-label">Zip code</label>
+    <input type="text" class="form-control" id="inputZip" name="zipCode">
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(()=>{
+    $('input[type="radio"]').bind('change', function(){
+      $('input[name="' + $(this).attr('name') + '"]').not($(this)).trigger('deselect');
+    });
+
+    $('#addressNewRadio').bind('deselect', function(){
+      $('#newAddressForm').hide();
+    })
+    $('#addressNewRadio').bind('change', function(){
+      $('#newAddressForm').show();
+    })
+
+    $('input[id^="address"]:radio:first').click();
+  })
+</script>

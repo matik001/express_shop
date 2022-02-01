@@ -7,7 +7,8 @@
 
 import { ADDRGETNETWORKPARAMS } from "dns";
 import { NextFunction, Request, Response } from "express";
-import { Like } from "typeorm";
+import { CircularRelationsError, Like } from "typeorm";
+import { updateCall } from "typescript";
 import { getDb } from "../configs/database";
 import { Address } from "../entity/address";
 import { CartItem } from "../entity/cartItem";
@@ -47,16 +48,16 @@ export const getCart = async (req: Request, res: Response, next: NextFunction) =
         relations: ['item', 'item.owner']
     })).map(a=>({
         ...a,
-        priceSum: `${countPrice([a]).toFixed(2)} zł.`
+        priceSum: countPrice([a])
     })) as CartItem[];
 
-    const totalPrice = `${countPrice(cartItems).toFixed(2)} zł.`;
+    const totalItemsPrice = countPrice(cartItems);
 
     /// TODO remove items with deleted flag from cart
     renderHelper(req, res, 'user/cart',{
         title: "Cart",
         cartItems: cartItems,
-        totalPrice: totalPrice
+        totalItemsPrice: totalItemsPrice
     });
 };
 export const postAddToCart = async (req: Request, res: Response, next: NextFunction) => {
@@ -97,16 +98,34 @@ export const postDeleteFromCart = async (req: Request, res: Response, next: Next
     res.redirect("/cart");
 }
 export const getCheckout = async (req: Request, res: Response, next: NextFunction) => {
-    const cartItems = await getDb().getRepository(CartItem).find({
+    const cartItems = (await getDb().getRepository(CartItem).find({
         where:{
             owner: req.user,
         },
         relations: ['item']
+    })).map(a=>({
+        ...a,
+        priceSum: countPrice([a])
+    })) as CartItem[];
+
+    const addresses = await getDb().getRepository(Address).find({
+        where: {
+            owner: req.user
+        }
     });
+
+    const deliveryPrice = 20;
+    const totalItemsPrice = countPrice(cartItems);
+    const totalPrice = deliveryPrice + totalItemsPrice;
 
     renderHelper(req, res, 'user/checkout',{
         title: 'Checkout',
-        cartItems: cartItems
+        cartItems: cartItems,
+        totalItemsPrice: totalItemsPrice,
+        deliveryPrice: deliveryPrice,
+        totalPrice: totalPrice,
+        addresses: addresses,  
+
     });
 };
 
@@ -118,6 +137,33 @@ const countPrice = (cartItems:CartItem[])=>{
     return sum;
 }
 export const postCheckout = async (req: Request, res: Response, next: NextFunction) => {
+    const {address : addressId, city, phone, street, zipCode} = req.body;
+
+    let address : Address | undefined = undefined;
+    if(addressId === 'new'){
+        const newAddress = new Address();
+        newAddress.city = city;
+        newAddress.phone = phone;
+        newAddress.street = street;
+        newAddress.zipCode = zipCode;
+        newAddress.owner = req.user!;
+        newAddress.country = "Polska";
+
+        address = await getDb().getRepository(Address).save(newAddress);
+    }
+    else{
+        address = await getDb().getRepository(Address).findOne({
+            where:{
+                id: addressId,
+                owner: req.user
+            }
+        });
+    }
+    if(!address){
+        res.locals.oldInput = req.body;
+        /// message 
+        return next();
+    }
     const cartItems = await getDb().getRepository(CartItem).find({
         where:{
             owner: req.user,
@@ -125,20 +171,17 @@ export const postCheckout = async (req: Request, res: Response, next: NextFuncti
         relations: ['item']
     });
     const newOrder = new Order();
-    newOrder.address = {
-        city: "City of Angels",
-        country: "Neverland",
-        street: "JP 2",
-        owner: req.user,
-    } as Address;
     newOrder.owner = req.user!;
     newOrder.status = OrderStatuses.ORDERED;
-    newOrder.totalPrice = countPrice(cartItems);
+    newOrder.deliveryPrice = 20;
+    newOrder.totalPrice = countPrice(cartItems) + newOrder.deliveryPrice;
+
     newOrder.orderItems = cartItems.map(a=>({
         amount: a.amount,
         item: a.item,
         priceOne: a.item.price,
     }) as OrderItem);
+    newOrder.address = address;
     newOrder.date = new Date();
 
     await getDb().getRepository(Order).save(newOrder);
@@ -151,7 +194,10 @@ export const getOrders = async (req: Request, res: Response, next: NextFunction)
     const orders = await getDb().getRepository(Order).find({
         where:{
             owner: req.user
-        }
+        },
+        relations: [
+            'address',
+        ]
     })
 
 
@@ -168,9 +214,21 @@ export const getOrder = async (req: Request, res: Response, next: NextFunction) 
         where:{
             id: orderId,
             owner: req.user
-        }
+        },
+        relations: [
+            'address',
+            'orderItems',
+            'orderItems.item',
+            // 'orderItems.item.owner',
+        ]
     })
-
+    if(!order){
+        return res.redirect('/orders');
+    }
+    order.orderItems = order.orderItems.map(a=>({
+        ...a,
+        priceSum: a.amount * a.priceOne
+    } as OrderItem));
 
     renderHelper(req, res, 'user/order',{
         order: order, 

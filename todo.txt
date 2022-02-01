@@ -13,10 +13,12 @@ dodac role super user, ktorzy zarzadza wszystkimi userami i wybiera adminow
 dodac opcje blokowania userami
 dodac cart dla niezalogowanych
 
-zrobić stronę cart
-zrobić stronę checkout
+* DONE ---------------------------- zrobić stronę cart
+* DONE ---------------------------- zrobić stronę checkout
 zrobić stronę orders
 zrobić stronę order
+
+normal delivery options and prices
 
 dodać prawdziwe płatności (stripe)
 dodać wysyłanie maili i potwierdzenia
@@ -25,4 +27,12 @@ dodanie wieku urodzenia
 dodanie odzyskiwania hasla przez maila
 recaptcha
 
+zamowieinie rozbic na wiele roznych od tych samych dostawcow
+
+naprawic menu przy zwijaniu
+
 dodać sprzedawanie storytel
+
+admin przeglada zlozone zamowienia do niego i moze np. wyslac towar i zmienic status
+statusy zmaówień:
+złożone, wysłane, zrealizowane

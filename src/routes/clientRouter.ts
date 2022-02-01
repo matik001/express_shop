@@ -11,7 +11,7 @@ clientRouter.post('/delete-from-cart/:productId', postDeleteFromCart);
 clientRouter.post('/change-cart-amount/:productId', postChangeCartAmount);
 
 clientRouter.get('/checkout', getCheckout);
-clientRouter.post('/checkout', postCheckout);
+clientRouter.post('/checkout', postCheckout, getCheckout);
 
 clientRouter.get('/orders', getOrders);
 clientRouter.get('/order/:orderId', getOrder);

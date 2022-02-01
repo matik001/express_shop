@@ -27,6 +27,11 @@ export class Order {
     @Column('double precision')
     totalPrice: number;
     
+
+    @Column('double precision', {default: 20.0})
+    deliveryPrice: number;
+    
+
     @ManyToOne(type=>Address, address=>address.orders, {cascade: ['insert']})
     address: Address;
     
@@ -37,6 +42,6 @@ export class Order {
 
     @OneToMany(type=>OrderItem, orderItem=>orderItem.order, {cascade: ['insert']})
     orderItems: OrderItem[];
-
+    
 }
 

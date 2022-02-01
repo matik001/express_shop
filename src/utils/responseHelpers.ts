@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { type } from "os";
 import { parse } from "url";
+import { Address } from "../entity/address";
 import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
 import { Order } from "../entity/order";
@@ -9,7 +10,7 @@ import { User } from "../entity/user";
 import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
 
-type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "None";
+type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "Orders" | "None";
 interface NavItem{
     name: NavNames;
     path: string;
@@ -57,6 +58,14 @@ const cartNav = {
     float: 'right'
 } as NavItem;
 
+const ordersNav = {
+    name: 'Orders',
+    path: '/orders',
+    icon: '<i class="bi bi-credit-card-2-front"></i>',
+    method: 'GET',
+    float: 'left'
+} as NavItem;
+
 const usersNav = {
     name: 'Users',
     path: '/admin/users',
@@ -83,11 +92,13 @@ const userNavs = [
     homeNav,
     logoutNav,
     cartNav,
+    ordersNav
 ]
 const adminNavs = [
     homeNav,
     adminItemsNav,
     usersNav,
+    ordersNav,
     logoutNav,
     cartNav,
 ]
@@ -105,7 +116,10 @@ interface RenderParams{
     orders?: Order[];
     order?: Order;
     phrase?: string;
-    totalPrice?: string;
+    totalItemsPrice?: number;
+    deliveryPrice?: number;
+    totalPrice?: number;
+    addresses?: Address[];
 }
 export const renderHelper = (req: Request, res: Response, view: string, args: RenderParams) => {
     const isAdmin = req.user?.roles.some(a=>a.id === Roles.Admin) ?? false;

@@ -11,17 +11,16 @@
 </style>
 {{/section}}
 
-checkout 
-{{#each cartItems}}
-    {{amount}}
-    {{item.name}}
-    {{item.price}}
-    <hr>
-{{/each}}
 
-<form method="post">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <button class="btn btn-primary" type="submit">
-        Finish order
-    </button>
-</form>
+{{#each orders}}
+<div class="card {{orderStatusToClasses status}} mb-3" style="width: 600px;">
+  <div class="card-header">Order #{{id}} - {{status}}</div>
+  <div class="card-body">
+    <p class="card-text">Date: {{formatDate date}}</p>
+    <p class="card-text">Address: {{address}}</p>
+    {{!-- <p class="card-text">Seller: {{address}}</p> --}}
+    <h5 class="card-title">Total price: {{formatPrice totalPrice}}</h5>
+    <a href="/order/{{id}}" class="float-right"><button class="btn btn-dark">More info</button></a>
+  </div>
+</div>
+{{/each}}
