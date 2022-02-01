@@ -36,9 +36,11 @@ export class Order {
     address: Address;
     
 
-    @ManyToOne(type=>User, user=>user.items)
-    owner: User;
-
+    @ManyToOne(type=>User, user=>user.createdOrders)
+    customer: User;
+    
+    @ManyToOne(type=>User, user=>user.receivedOrders)
+    seller: User;
 
     @OneToMany(type=>OrderItem, orderItem=>orderItem.order, {cascade: ['insert']})
     orderItems: OrderItem[];

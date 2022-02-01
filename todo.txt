@@ -1,6 +1,6 @@
 pagination
 poprawić wygląd np. przycisk dodania do koszyku bez nazwy, wiekszy
-naprawic edycje przedmiotu
+* DONE ----------------------------naprawic edycje przedmiotu
 zarzadzanie adresami
 sprawdzic czy wylapywane sa bledy przez 500
 zabezpieczenie przed ddosem
@@ -13,10 +13,18 @@ dodac role super user, ktorzy zarzadza wszystkimi userami i wybiera adminow
 dodac opcje blokowania userami
 dodac cart dla niezalogowanych
 
+inne tlo przy zmianie obrazka
+
 * DONE ---------------------------- zrobić stronę cart
 * DONE ---------------------------- zrobić stronę checkout
-zrobić stronę orders
-zrobić stronę order
+* DONE ---------------------------- zrobić stronę orders
+* DONE ---------------------------- zrobić stronę order
+
+edycja itemu ma tworzyc nową kopie, a starą wywalić, chyba że jest gdzies w orderach
+
+* DONE ----------------------------lepsza strona not found
+
+poprawic wyglad orderow
 
 normal delivery options and prices
 
@@ -28,10 +36,16 @@ dodanie odzyskiwania hasla przez maila
 recaptcha
 
 zamowieinie rozbic na wiele roznych od tych samych dostawcow
+zabezpiecznie przed wyslaniem pustych formularzy, lub z blednymi danymi
+zabezpiecznie czy na pewno dany produkt/zamowienie itp nalezy do osoby ktora cos z tym robi
 
-naprawic menu przy zwijaniu
+---- naprawic menu przy zwijaniu
+
+dodac allegro api do scrapowania produktow
 
 dodać sprzedawanie storytel
+
+
 
 admin przeglada zlozone zamowienia do niego i moze np. wyslac towar i zmienic status
 statusy zmaówień:

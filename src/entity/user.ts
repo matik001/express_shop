@@ -26,8 +26,11 @@ export class User {
     @OneToMany(type=>CartItem, cartItem=>cartItem.owner)
     cartItems: Promise<CartItem[]>;
 
-    @OneToMany(type=>Order, order=>order.owner)
-    orders: Promise<Order[]>;
+    @OneToMany(type=>Order, order=>order.customer)
+    createdOrders: Promise<Order[]>;
+    
+    @OneToMany(type=>Order, order=>order.seller)
+    receivedOrders: Promise<Order[]>;
 
     @OneToMany(type=>Address, order=>order.owner)
     addresses: Promise<Address[]>;

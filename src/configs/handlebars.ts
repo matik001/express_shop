@@ -43,7 +43,13 @@ const configureHandlebars = (app:express.Express)=>{
                     }
                 },
                 formatPrice(price:number){
-                    return `${price.toFixed(2)} zł.`;
+                    return `${price.toFixed(2)} PLN`;
+                },
+                or(a:any, b:any){
+                    return a || b;
+                },
+                orNull(a:any, b:any){
+                    return a ?? b;
                 }
                 // bar() { return 'BAR!'; }
             }

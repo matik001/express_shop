@@ -10,7 +10,7 @@ import { User } from "../entity/user";
 import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
 
-type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "Orders" | "None";
+type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "Orders" | 'Manage Orders' | "None";
 interface NavItem{
     name: NavNames;
     path: string;
@@ -66,6 +66,14 @@ const ordersNav = {
     float: 'left'
 } as NavItem;
 
+const manageOrdersNav = {
+    name: 'Manage Orders',
+    path: '/admin/manage-orders',
+    icon: '<i class="bi bi-send-check"></i>',
+    method: 'GET',
+    float: 'left'
+} as NavItem;
+
 const usersNav = {
     name: 'Users',
     path: '/admin/users',
@@ -99,6 +107,7 @@ const adminNavs = [
     adminItemsNav,
     usersNav,
     ordersNav,
+    manageOrdersNav,
     logoutNav,
     cartNav,
 ]

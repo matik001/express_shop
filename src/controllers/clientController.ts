@@ -53,6 +53,11 @@ export const getCart = async (req: Request, res: Response, next: NextFunction) =
 
     const totalItemsPrice = countPrice(cartItems);
 
+    if(cartItems.length == 0){
+        return renderHelper(req, res, 'user/empty-cart',{
+            title: "Empty cart",
+        });    
+    }
     /// TODO remove items with deleted flag from cart
     renderHelper(req, res, 'user/cart',{
         title: "Cart",
@@ -168,10 +173,11 @@ export const postCheckout = async (req: Request, res: Response, next: NextFuncti
         where:{
             owner: req.user,
         },
-        relations: ['item']
+        relations: ['item', 'item.owner']
     });
     const newOrder = new Order();
-    newOrder.owner = req.user!;
+    newOrder.customer = req.user!;
+    newOrder.seller = cartItems[0].item.owner;
     newOrder.status = OrderStatuses.ORDERED;
     newOrder.deliveryPrice = 20;
     newOrder.totalPrice = countPrice(cartItems) + newOrder.deliveryPrice;
@@ -193,10 +199,11 @@ export const postCheckout = async (req: Request, res: Response, next: NextFuncti
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
     const orders = await getDb().getRepository(Order).find({
         where:{
-            owner: req.user
+            customer: req.user
         },
         relations: [
             'address',
+            'seller',
         ]
     })
 
@@ -213,11 +220,12 @@ export const getOrder = async (req: Request, res: Response, next: NextFunction) 
     const order = await getDb().getRepository(Order).findOne({
         where:{
             id: orderId,
-            owner: req.user
+            customer: req.user
         },
         relations: [
             'address',
             'orderItems',
+            'seller',
             'orderItems.item',
             // 'orderItems.item.owner',
         ]
@@ -260,3 +268,19 @@ export const postChangeCartAmount = async (req: Request, res: Response, next: Ne
 };
 
 
+export const postMarkReceivedOrder = async (req: Request, res: Response, next: NextFunction) => {
+    const orderId = req.params.orderId;
+
+    const order = await getDb().getRepository(Order).findOne({
+        where:{
+            id: orderId,
+            seller: req.user,
+        },
+    })
+    if(!order || order.status != OrderStatuses.SENT){
+        return res.redirect('/admin/manage-orders');
+    }
+    order.status = OrderStatuses.FINISHED;
+    await getDb().getRepository(Order).save(order);
+    return res.redirect('/admin/manage-orders');
+};

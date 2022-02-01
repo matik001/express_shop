@@ -1,5 +1,5 @@
 {{#section 'head'}}
-    <style>
+<style>
     .checkout-container {
         width: 50%;
         margin-left: auto;
@@ -14,7 +14,6 @@
         background-color: white;
         padding: 30px;
     }
-
 </style>
 {{/section}}
 
@@ -23,54 +22,66 @@
 {{#with order}}
 
 
-    <div class="checkout-card mt-3">
-        <h2 class="float-left">Order #{{id}}</h2>
-        <h2 class="float-right">Status: {{status}}</h2>
-        <div style="clear:both"></div>
-        <hr />
-        <p class="card-text">Date: {{formatDate date}}</p>
+<div class="checkout-card mt-3">
+    <h2 class="float-left">Order #{{id}}</h2>
+    <h2 class="float-right">Status: {{status}}</h2>
+    <div style="clear:both"></div>
+    <hr />
+    <p class="card-text">Date: {{formatDate date}}</p>
+    <p class="card-text">Seller: {{seller.fullname}}</p>
 
-        <div class="list-group">
-            {{#each orderItems}}
-            <div class="list-group-item">
-                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-                    <img src="{{item.imageUrl}}" style="height: 50px; width: 50px;" />
-                    <div>
-                        <div class="d-flex justify-content-between">
-                            <h4 class="mb-1 font-weight-bold">{{item.name}}</h4>
-                        </div>
-                    </div>
-                    <div>
-                        <h5 class="text-center">{{amount}} x {{formatPrice item.price}}</h5>
-                    </div>
-                    <div>
-                        <h4 class="text-center font-weight-bold">{{formatPrice priceSum}}</h4>
+    <div class="list-group">
+        {{#each orderItems}}
+        <div class="list-group-item">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                <img src="{{item.imageUrl}}" style="height: 50px; width: 50px;" />
+                <div>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="mb-1 font-weight-bold">{{item.name}}</h4>
                     </div>
                 </div>
-            </div>
-            {{/each}}
-            <div class="list-group-item">
-                <div style="display: flex; flex-direction: row; justify-content: right; align-items: center; gap: 30px;">
-                    <h4>
-                        Delivery cost:
-                    </h4>
-                    <h4 class="text-center font-weight-bold">{{formatPrice deliveryPrice}}</h4>
+                <div>
+                    <h5 class="text-center">{{amount}} x {{formatPrice item.price}}</h5>
                 </div>
-            </div>
-
-            <div class="list-group-item" style="padding: 10px 50px 0 50px; ">
-                <hr />
-            </div>
-            <div class="list-group-item" style="padding: 0 50px 30px 50px;">
-                <div class="float-right mt-3 font-weight-bold">
-                    <h2>Total price:</h2>                    
-                    <h3 style="text-align: right;">
-                        {{formatPrice totalPrice}}
-                    </h3>
+                <div>
+                    <h4 class="text-center font-weight-bold">{{formatPrice priceSum}}</h4>
                 </div>
             </div>
         </div>
+        {{/each}}
+        <div class="list-group-item">
+            <div style="display: flex; flex-direction: row; justify-content: right; align-items: center; gap: 30px;">
+                <h4>
+                    Delivery cost:
+                </h4>
+                <h4 class="text-center font-weight-bold">{{formatPrice deliveryPrice}}</h4>
+            </div>
+        </div>
+
+        <div class="list-group-item" style="padding: 10px 50px 0 50px; ">
+            <hr />
+        </div>
+        <div class="list-group-item" style="padding: 0 50px 30px 50px;">
+            <div class="float-right mt-3 font-weight-bold">
+                <h2>Total price:</h2>
+                <h3 style="text-align: right;">
+                    {{formatPrice totalPrice}}
+                </h3>
+            </div>
+        </div>
     </div>
+    {{#if (eq status 'sent')}}
+    <form method="post" action="/orders/{{id}}/receivedStatus">
+        <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+        <button type="submit" class="btn btn-warning mt-3 float-right">
+            <i class="bi bi-check-circle-fill"></i>
+
+            Mark as received
+        </button>
+        <div class="clearfix"></div>
+    </form>
+    {{/if}}
+</div>
 
 
 {{/with}}

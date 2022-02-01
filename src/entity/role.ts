@@ -11,7 +11,7 @@ export class Role {
     @Column()
     name: string;
 
-    @ManyToMany(type=>Order, order=>order.owner)
+    @ManyToMany(type=>Order, order=>order.customer)
     users: User[];
 
 }
