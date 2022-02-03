@@ -15,6 +15,8 @@ const ENV_KEYS = {
     TYPEORM_PASSWORD: process.env['TYPEORM_PASSWORD']!,
     TYPEORM_DATABASE: process.env['TYPEORM_DATABASE']!,
     TYPEORM_PORT: parseInt(process.env['TYPEORM_PORT']!),
+    GOOGLE_CALLBACK: process.env['GOOGLE_CALLBACK']!,
+    FACEBOOK_CALLBACK: process.env['FACEBOOK_CALLBACK']!,
 }
 
 

@@ -29,7 +29,7 @@ const passportConfig = (app: express.Express) => {
     passport.use(new GoogleStrategy({
         clientID: ENV_KEYS.GOOGLE_CLIENT_ID,
         clientSecret: ENV_KEYS.GOOGLE_SECRET,
-        callbackURL: "http://localhost:3000/auth/google/callback",
+        callbackURL: ENV_KEYS.GOOGLE_CALLBACK,
         passReqToCallback: true
     },
         async (request, accessToken, refreshToken, profile, done) => {
@@ -58,7 +58,7 @@ const passportConfig = (app: express.Express) => {
         clientID: ENV_KEYS.FACEBOOK_CLIENT_ID,
         clientSecret: ENV_KEYS.FACEBOOK_CLIENT_SECRET,
         profileFields: ['id', 'emails', 'displayName'],
-        callbackURL: 'http://localhost:3000/auth/facebook/callback',
+        callbackURL: ENV_KEYS.FACEBOOK_CALLBACK,
       },
       async (accessToken, refreshToken, profile, done) => {
         const repo = getDb().getRepository(User)

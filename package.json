@@ -8,7 +8,8 @@
       "fast": "nodemon src/app.ts",
       "start": "nodemon --watch src/**/* -e ts,json --exec node --inspect -r ts-node/register src/app.ts",
       "build": "tsc",
-      "postinstall": "npm run build"
+      "syncDb": "npm run typeorm migration:run",
+      "postinstall": "npm run build && npm run build syncDb"
    },
    "engines": {
       "node": "16.11.1"
