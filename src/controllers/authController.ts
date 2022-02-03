@@ -4,36 +4,40 @@ import { User } from "../entity/user";
 import { getValidationErrors, renderHelper } from "../utils/responseHelpers";
 import bcrypt from 'bcrypt';
 import session from "express-session";
+import passport from "passport";
 
 export const getLogin = async (req: Request, res: Response, next: NextFunction) => {
     renderHelper(req, res, 'login',{
         title: "Login",
-        returnUrl: req.query.returnUrl as string ?? '/'
+        returnUrl: req.query.returnUrl as string ?? '/',
     });
 }
+
+
+
 export const postLogin = async (req: Request, res: Response, next: NextFunction) => {
-    const {email, password}= req.body;
-    const user = await getDb().getRepository(User).findOne({
-        where:{email: email}
-    });
-    
-    if (user) {
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (validPassword) {
-        req.session.userId = user.id;
-        req.session.save(err=>{
-            console.log(err);
-            res.redirect(req.query.returnUrl as string ?? '/');
-        });
-        return;
-      } 
-    }
-    res.locals.oldInput = {
-        email, 
-        password,
-    }
-    res.locals.error = "Wrong email or password";
-    next();
+    passport.authenticate('local', function(err, user, info) {
+        if (err) { return next(err); }
+        
+        if (!user){
+            const {email, password}= req.body;
+
+            res.locals.oldInput = {
+                email, 
+                password,
+            }
+            res.locals.error = "Wrong email or password";
+            
+            next();
+            return;
+        }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            req.session.save(()=>{
+                res.redirect(req.query.returnUrl as string ?? '/');
+            });
+        });  
+    })(req, res, next);
 }
 
 export const getRegister = async (req: Request, res: Response, next: NextFunction) => {
@@ -77,10 +81,11 @@ export const postRegister = async (req: Request, res: Response, next: NextFuncti
     // };
     // sendgrid.send(msg).catch(error=>console.log(error));
 
-    req.session.userId  = user.id;
-    req.session!.save(err=>{
-        res.redirect(req.query.returnUrl as string ?? '/');     
-    });
+    req.login(user, (err:any)=>{
+        req.session.save(()=>{
+            res.redirect(req.query.returnUrl as string ?? '/');     
+        });
+    })
 }
 
 
@@ -89,6 +94,8 @@ export const postRegister = async (req: Request, res: Response, next: NextFuncti
 
 
 export const postLogout = async (req: Request, res: Response, next: NextFunction) => {
+    // req.logOut();
+    // res.redirect(req.query.returnUrl as string ?? '/');
     req.session.destroy(err=>{
         if(err)
             console.log(err);

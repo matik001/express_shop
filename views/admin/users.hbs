@@ -1,29 +1,34 @@
 {{#section 'head'}}
-    <style>
-        .user-item{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-        }
-        .content-list{
-            width: 60%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
+<style>
+    .user-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .users-container {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: white;
+        padding: 30px;
+    }
+</style>
 {{/section}}
 
-<h2 class="card-title mt-3 mb-4 text-center">Users list</h2>
+<h2 class="card-title mt-3 mb-4 text-center"></h2>
 
-<div class="content-list">
+<div class="users-container mt-3">
+    <h1 class="text-center">Users list</h1>
+    <hr />
 
-    <table class="table table-light">
+    <table class="table  mt-5">
         <thead>
             <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Fullname</th>
-            <th scope="col">Email</th>
-            <th scope="col">Roles</th>
+                <th scope="col">ID</th>
+                <th scope="col">Fullname</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +39,7 @@
                 <td>{{email}}</td>
                 <td>
                     {{#each roles}}
-                        <span class="badge rounded-pill bg-primary">{{name}}</span>
+                    <span class="badge rounded-pill bg-primary">{{name}}</span>
                     {{/each}}
                 </td>
             </tr>

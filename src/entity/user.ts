@@ -20,6 +20,13 @@ export class User {
     @Column()
     password: string;
     
+    @Column({nullable: true})
+    googleId: string;
+    
+    @Column({nullable: true})
+    facebookId: string;
+    
+
     @OneToMany(type=>Item, item=>item.owner)
     items: Promise<Item[]>;
 

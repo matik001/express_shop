@@ -26,6 +26,9 @@ edycja itemu ma tworzyc nową kopie, a starą wywalić, chyba że jest gdzies w 
 
 poprawic wyglad orderow
 
+
+haslo zawsze zahaszowane takze przy google
+
 normal delivery options and prices
 
 dodać prawdziwe płatności (stripe)
@@ -33,6 +36,7 @@ dodać wysyłanie maili i potwierdzenia
 
 dodanie wieku urodzenia
 dodanie odzyskiwania hasla przez maila
+zmiana hasla
 recaptcha
 
 zamowieinie rozbic na wiele roznych od tych samych dostawcow

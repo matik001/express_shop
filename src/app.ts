@@ -1,6 +1,21 @@
 import "reflect-metadata";
 
-import express from 'express';
+import express, {Express} from 'express';
+import {User as AppUser} from './entity/user';
+export {}
+
+declare global {
+  namespace Express {
+    interface User extends AppUser {}
+    interface Request {
+      user?: User
+    }
+  }
+}
+// declare namespace Express {
+//   export interface User extends UserModel {}
+// }
+
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import sessionFileStore from 'session-file-store'; 
@@ -9,15 +24,16 @@ const FileStore = sessionFileStore(session);
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import configureHandlebars from './configs/handlebars';
-import ENV_KEYS from './configs/secred_keys';
+import ENV_KEYS from './configs/envKeys';
 import clientRouter from "./routes/clientRouter";
 import authRouter from "./routes/authRouter";
 import catch404 from "./middleware/catch404";
 import catch500 from "./middleware/catch500";
 import catch403 from "./middleware/catch403";
 import { configureDatabase } from "./configs/database";
-import getUserMiddleware from "./middleware/getUserMiddleware";
 import adminRouter from "./routes/adminRouter";
+import passportConfig from "./configs/passport";
+import flash from 'connect-flash'
 
 
 
@@ -33,16 +49,16 @@ app.use(express.static('./static'));
 app.use(cookieParser());
 
 app.use(session({
-  store: new FileStore({logFn: ()=>{}}),
+  store: new FileStore({logFn: function(){}}),
   secret: ENV_KEYS.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }))
-
+app.use(flash());
 app.use(csrf());
 
-app.use(getUserMiddleware);
+passportConfig(app);
 
 app.use(clientRouter);
 app.use(authRouter);

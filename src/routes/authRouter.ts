@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
+import passport from "passport";
 import { getDb } from "../configs/database";
 import { getLogin, getRegister, postLogin, postLogout, postRegister } from "../controllers/authController";
 import { User } from "../entity/user";
@@ -9,14 +10,10 @@ const authRouter = Router();
 
 
 authRouter.get('/login', isNotAuth(), getLogin);
-authRouter.post('/login', isNotAuth('/'),[
-    body('email')
-        .trim()
-        .normalizeEmail(),
-    body('password')
-        .trim()
-    ], postLogin, getLogin);
-    
+authRouter.post('/login', isNotAuth('/'), postLogin, getLogin);
+
+
+
 
 authRouter.get('/register', isNotAuth(), getRegister);
 
@@ -44,11 +41,30 @@ authRouter.post('/register', isNotAuth(), [
         .withMessage("Passwords are different")
 ], postRegister, getRegister);
 
+
+
 authRouter.post('/logout', isAuth, postLogout);
 
 // authRouter.get('/reset-password', getResetPassword);
 // authRouter.post('/reset-password', postResetPassword);
 // authRouter.get('/new-password/:token', isNotAuth('/'), getNewPassword);
 // authRouter.post('/new-password', isNotAuth('/'), postNewPassword);
+
+
+authRouter.get('/auth/google',
+  passport.authenticate('google', { scope:
+      [ 'email', 'profile' ] }
+));
+
+authRouter.get( '/auth/google/callback',
+    passport.authenticate( 'google', {
+        // successRedirect: '/',
+        failureRedirect: '/login',
+}), (req, res)=>{
+    req.session.save(()=>{
+        res.redirect('/');
+    });
+});
+
 
 export default authRouter;

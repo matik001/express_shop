@@ -1,13 +1,11 @@
 import { Response, Request } from "express";
 import { validationResult } from "express-validator";
-import { type } from "os";
 import { parse } from "url";
 import { Address } from "../entity/address";
 import { CartItem } from "../entity/cartItem";
 import { Item } from "../entity/item";
 import { Order } from "../entity/order";
 import { User } from "../entity/user";
-import hasRole from "../middleware/hasRole";
 import { Roles } from "../seeding/seedRoles";
 
 type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "Orders" | 'Manage Orders' | "None";
@@ -136,7 +134,7 @@ export const renderHelper = (req: Request, res: Response, view: string, args: Re
 
     let navs = args.navItems;
     if(!navs){
-        if(!req.isLoggedIn)
+        if(!req.user)
             navs = unauthenticatedNavs;
         else if(isAdmin)
             navs = adminNavs;
@@ -153,6 +151,8 @@ export const renderHelper = (req: Request, res: Response, view: string, args: Re
         activeNav: args.activeNav ?? activeNavTitle,
         navItems: navs,
         csrfToken: req.csrfToken(),
+        error: res.locals.error ?? req.flash('error'),
+        errors: res.locals.errors ?? req.flash('errors'),
         // path: args.path || view,
         // isAuthenticated: req.session!.isLoggedIn === true
     };

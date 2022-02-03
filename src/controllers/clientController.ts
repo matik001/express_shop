@@ -1,10 +1,3 @@
-// import { Router, NextFunction, Response, Request } from "express";
-// import Product from "../models/product";
-// import CartHelper from "../models/cartHelper";
-// import { IUserPopulated } from "../models/User";
-// import Order, { IOrder } from "../models/order";
-// import { renderHelper } from "../util/ResponseHelper";
-
 import { ADDRGETNETWORKPARAMS } from "dns";
 import { NextFunction, Request, Response } from "express";
 import { CircularRelationsError, Like } from "typeorm";

@@ -1,7 +1,7 @@
 import express from 'express';
 import { create } from 'express-handlebars';
 import { OrderStatuses } from '../entity/order';
-import ENV_KEYS from './secred_keys';
+import ENV_KEYS from './envKeys';
 
 const configureHandlebars = (app:express.Express)=>{
     const hbs = create({
