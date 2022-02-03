@@ -1,6 +1,6 @@
 import express from 'express';
 import { create } from 'express-handlebars';
-import { OrderStatuses } from '../entity/order';
+import { OrderStatuses } from '../entity/order.entity';
 import ENV_KEYS from './envKeys';
 
 const configureHandlebars = (app:express.Express)=>{

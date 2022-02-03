@@ -2,12 +2,13 @@ import passport from 'passport';
 import express from 'express'
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import {Strategy as FacebookStrategy} from 'passport-facebook';
 import { getDb } from './database';
-import { User } from '../entity/user';
+import { User } from '../entity/user.entity';
 import bcrypt from 'bcrypt';
 import ENV_KEYS from './envKeys';
-
 const passportConfig = (app: express.Express) => {
+    ///// --------------------- LOCAL STRATEGY ---------------------
     passport.use(new LocalStrategy({
         usernameField: 'email'
     }, async (email, password, cb) => {
@@ -24,6 +25,7 @@ const passportConfig = (app: express.Express) => {
         return cb(null, false, { message: 'Incorrect username or password.' });
     }));
 
+    ///// --------------------- GOOGLE STRATEGY ---------------------
     passport.use(new GoogleStrategy({
         clientID: ENV_KEYS.GOOGLE_CLIENT_ID,
         clientSecret: ENV_KEYS.GOOGLE_SECRET,
@@ -49,40 +51,35 @@ const passportConfig = (app: express.Express) => {
             return done(null, user);
         }
     ));
-    /*
-{
-  id: '103530246196936187658',
-  displayName: 'Mateusz Kisiel',
-  name: { familyName: 'Kisiel', givenName: 'Mateusz' },
-  emails: [ { value: 'mateusz.kisiel.mk@gmail.com', verified: true } ],
-  photos: [
-    {
-      value: 'https://lh3.googleusercontent.com/a-/AOh14GgcMF7c4t7gAYipDcPZIGyiA9rnVHJhKv06DPA1=s96-c'
-    }
-  ],
-  provider: 'google',
-  _raw: '{\n' +
-    '  "sub": "103530246196936187658",\n' +
-    '  "name": "Mateusz Kisiel",\n' +
-    '  "given_name": "Mateusz",\n' +
-    '  "family_name": "Kisiel",\n' +
-    '  "picture": "https://lh3.googleusercontent.com/a-/AOh14GgcMF7c4t7gAYipDcPZIGyiA9rnVHJhKv06DPA1\\u003ds96-c",\n' +
-    '  "email": "mateusz.kisiel.mk@gmail.com",\n' +
-    '  "email_verified": true,\n' +
-    '  "locale": "pl"\n' +
-    '}',
-  _json: {
-    sub: '103530246196936187658',
-    name: 'Mateusz Kisiel',
-    given_name: 'Mateusz',
-    family_name: 'Kisiel',
-    picture: 'https://lh3.googleusercontent.com/a-/AOh14GgcMF7c4t7gAYipDcPZIGyiA9rnVHJhKv06DPA1=s96-c',
-    email: 'mateusz.kisiel.mk@gmail.com',
-    email_verified: true,
-    locale: 'pl'
-  }
-}
-    */
+
+    ///// --------------------- FACEBOOK STRATEGY ---------------------
+
+    passport.use(new FacebookStrategy({
+        clientID: ENV_KEYS.FACEBOOK_CLIENT_ID,
+        clientSecret: ENV_KEYS.FACEBOOK_CLIENT_SECRET,
+        profileFields: ['id', 'emails', 'displayName'],
+        callbackURL: 'http://localhost:3000/auth/facebook/callback',
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const repo = getDb().getRepository(User)
+
+        let user = await repo.findOne({where:{
+            facebookId:  profile.id,
+        }})
+        if(!user){
+            user = {
+                facebookId: profile.id,
+                fullname: profile.displayName,
+                email: profile.emails![0].value,
+                password: Math.random().toString(36).substring(2, 20),
+            } as User;
+            await repo.save(user);
+        }
+        
+        return done(null, user);
+      }));
+
+    ///// --------------------- MIDDLEWARES STRATEGY ---------------------
 
 
     passport.serializeUser((user, cb) => {

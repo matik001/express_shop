@@ -3,12 +3,12 @@ import { NextFunction, Request, Response } from "express";
 import { CircularRelationsError, Like } from "typeorm";
 import { updateCall } from "typescript";
 import { getDb } from "../configs/database";
-import { Address } from "../entity/address";
-import { CartItem } from "../entity/cartItem";
-import { Item } from "../entity/item";
-import { Order, OrderStatuses } from "../entity/order";
-import { OrderItem } from "../entity/orderItem";
-import { User } from "../entity/user";
+import { Address } from "../entity/address.entity";
+import { CartItem } from "../entity/cartItem.entity";
+import { Item } from "../entity/item.entity";
+import { Order, OrderStatuses } from "../entity/order.entity";
+import { OrderItem } from "../entity/orderItem.entity";
+import { User } from "../entity/user.entity";
 import { renderHelper } from "../utils/responseHelpers";
 
 // //// USERS

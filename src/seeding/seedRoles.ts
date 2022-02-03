@@ -1,5 +1,5 @@
 import { getDb } from "../configs/database";
-import { Role } from "../entity/role";
+import { Role } from "../entity/role.entity";
 
 export enum Roles{
     Admin = 1
@@ -7,6 +7,7 @@ export enum Roles{
 
 const seedRoles = async ()=>{
     const repo = getDb().getRepository(Role);
+    const all = await repo.find();
     await repo.save({
         id: 1,
         name: 'admin'

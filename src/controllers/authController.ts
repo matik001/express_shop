@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getDb } from "../configs/database";
-import { User } from "../entity/user";
+import { User } from "../entity/user.entity";
 import { getValidationErrors, renderHelper } from "../utils/responseHelpers";
 import bcrypt from 'bcrypt';
 import session from "express-session";

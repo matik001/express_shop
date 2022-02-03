@@ -1,7 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm";
-import { Address } from "./address";
-import { OrderItem } from "./orderItem";
-import { User } from "./user";
+import { Address } from "./address.entity";
+import { OrderItem } from "./orderItem.entity";
+import { User } from "./user.entity";
 
 export const OrderStatuses ={
     ORDERED: "ordered",

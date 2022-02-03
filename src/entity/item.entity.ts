@@ -1,7 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, OneToMany, RelationOptions} from "typeorm";
-import { CartItem } from "./cartItem";
-import { OrderItem } from "./orderItem";
-import { User } from "./user";
+import { CartItem } from "./cartItem.entity";
+import { OrderItem } from "./orderItem.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Item {

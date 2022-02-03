@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { parse } from "url";
-import { Address } from "../entity/address";
-import { CartItem } from "../entity/cartItem";
-import { Item } from "../entity/item";
-import { Order } from "../entity/order";
-import { User } from "../entity/user";
+import { Address } from "../entity/address.entity";
+import { CartItem } from "../entity/cartItem.entity";
+import { Item } from "../entity/item.entity";
+import { Order } from "../entity/order.entity";
+import { User } from "../entity/user.entity";
 import { Roles } from "../seeding/seedRoles";
 
 type NavNames = 'Login'|'Register'|'Home'|'Contact'|'Logout'|'My items' | 'Cart' | "Users" | "Orders" | 'Manage Orders' | "None";

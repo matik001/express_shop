@@ -1,9 +1,9 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable} from "typeorm";
-import { Address } from "./address";
-import { CartItem } from "./cartItem";
-import { Item } from "./item";
-import { Order } from "./order";
-import { Role } from "./role";
+import { Address } from "./address.entity";
+import { CartItem } from "./cartItem.entity";
+import { Item } from "./item.entity";
+import { Order } from "./order.entity";
+import { Role } from "./role.entity";
 
 @Entity()
 export class User {

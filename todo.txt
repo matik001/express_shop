@@ -8,19 +8,19 @@ zabezpieczenie przed ddosem
 sprawdzic czy LIKE zabezpiecza przed sql injection
 znalezc hosting bazy danych 
 dodać na heroku
-dodac logowanie googlowskie
+* DONE ---------------------------- dodac logowanie googlowskie
 dodac role super user, ktorzy zarzadza wszystkimi userami i wybiera adminow
-dodac opcje blokowania userami
+dodac opcje blokowania userów
 dodac cart dla niezalogowanych
 
-inne tlo przy zmianie obrazka
+* DONE ---------------------------- inne tlo przy zmianie obrazka
 
 * DONE ---------------------------- zrobić stronę cart
 * DONE ---------------------------- zrobić stronę checkout
 * DONE ---------------------------- zrobić stronę orders
 * DONE ---------------------------- zrobić stronę order
 
-edycja itemu ma tworzyc nową kopie, a starą wywalić, chyba że jest gdzies w orderach
+* DONE ---------------------------- edycja itemu ma tworzyc nową kopie, bo moze byc w orderach
 
 * DONE ----------------------------lepsza strona not found
 
@@ -29,7 +29,7 @@ poprawic wyglad orderow
 
 haslo zawsze zahaszowane takze przy google
 
-normal delivery options and prices
+wiele opcji dostaw, każda z osobną ceną
 
 dodać prawdziwe płatności (stripe)
 dodać wysyłanie maili i potwierdzenia
@@ -40,7 +40,7 @@ zmiana hasla
 recaptcha
 
 zamowieinie rozbic na wiele roznych od tych samych dostawcow
-zabezpiecznie przed wyslaniem pustych formularzy, lub z blednymi danymi
+* DONE ---------------------------- zabezpiecznie przed wyslaniem pustych formularzy, lub z blednymi danymi
 zabezpiecznie czy na pewno dany produkt/zamowienie itp nalezy do osoby ktora cos z tym robi
 
 ---- naprawic menu przy zwijaniu
@@ -48,9 +48,4 @@ zabezpiecznie czy na pewno dany produkt/zamowienie itp nalezy do osoby ktora cos
 dodac allegro api do scrapowania produktow
 
 dodać sprzedawanie storytel
-
-
-
-admin przeglada zlozone zamowienia do niego i moze np. wyslac towar i zmienic status
-statusy zmaówień:
-złożone, wysłane, zrealizowane
+* DONE ---------------------------- admin przeglada zlozone zamowienia do niego i moze np. wyslac towar i zmienic status

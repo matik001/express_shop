@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import express, {Express} from 'express';
-import {User as AppUser} from './entity/user';
+import {User as AppUser} from './entity/user.entity';
 export {}
 
 declare global {
@@ -13,8 +13,12 @@ declare global {
   }
 }
 // declare namespace Express {
-//   export interface User extends UserModel {}
+//   export interface User extends AppUser {}
+//   interface Request {
+//     user?: User;
+//   }
 // }
+
 
 import bodyParser from 'body-parser';
 import session from 'express-session';

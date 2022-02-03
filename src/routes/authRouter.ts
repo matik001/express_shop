@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import passport from "passport";
 import { getDb } from "../configs/database";
 import { getLogin, getRegister, postLogin, postLogout, postRegister } from "../controllers/authController";
-import { User } from "../entity/user";
+import { User } from "../entity/user.entity";
 import isAuth from "../middleware/isAuth";
 import isNotAuth from "../middleware/isNotAuth";
 const authRouter = Router();
@@ -65,6 +65,21 @@ authRouter.get( '/auth/google/callback',
         res.redirect('/');
     });
 });
+
+authRouter.get('/auth/facebook',
+  passport.authenticate('facebook', { scope : ['email'] }));
+
+
+authRouter.get( '/auth/facebook/callback',
+    passport.authenticate( 'facebook', {
+        // successRedirect: '/',
+        failureRedirect: '/login',
+}), (req, res)=>{
+    req.session.save(()=>{
+        res.redirect('/');
+    });
+});
+
 
 
 export default authRouter;

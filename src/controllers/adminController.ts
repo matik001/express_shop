@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { Like } from "typeorm";
 import { getDb } from "../configs/database";
-import { CartItem } from "../entity/cartItem";
-import { Item } from "../entity/item";
-import { Order, OrderStatuses } from "../entity/order";
-import { OrderItem } from "../entity/orderItem";
-import { User } from "../entity/user";
+import { CartItem } from "../entity/cartItem.entity";
+import { Item } from "../entity/item.entity";
+import { Order, OrderStatuses } from "../entity/order.entity";
+import { OrderItem } from "../entity/orderItem.entity";
+import { User } from "../entity/user.entity";
 import { getValidationErrors, renderHelper } from "../utils/responseHelpers";
 
 
@@ -123,12 +123,17 @@ export const postEditItem = async (req: Request, res: Response, next: NextFuncti
    if(!item)
        return res.redirect('/admin')
 
-    item.price = price;
-    item.name = name;
-    item.description = description;
-    if(imageUrl)
-        item.imageUrl = imageUrl;
+    const itemClone = {
+        price: price,
+        name: name,
+        description: description,
+        imageUrl: (imageUrl ?? item.imageUrl),
+        owner: req.user!,
+    } as Partial<Item>;
+    item.deleted = true;
+    await getDb().getRepository(Item).save(itemClone);
     await getDb().getRepository(Item).save(item);
+
 
    res.redirect('/admin')
 };
