@@ -9,7 +9,7 @@
       "start": "nodemon --watch src/**/* -e ts,json --exec node --inspect -r ts-node/register src/app.ts",
       "build": "tsc",
       "syncDb": "npm run typeorm migration:run",
-      "postinstall": "npm run build && npm run build syncDb"
+      "postinstall": "npm run build && npm run syncDb"
    },
    "engines": {
       "node": "16.11.1"
