@@ -1,11 +1,12 @@
 pagination
 poprawić wygląd np. przycisk dodania do koszyku bez nazwy, wiekszy
 * DONE ----------------------------naprawic edycje przedmiotu
+zarządznie profilem
 zarzadzanie adresami
 sprawdzic czy wylapywane sa bledy przez 500
 zabezpieczenie przed ddosem
 
-sprawdzic czy LIKE zabezpiecza przed sql injection
+* DONE ---------------------------- sprawdzic czy typeorm LIKE zabezpiecza przed sql injection, nie zastępuje % jednak jest to oficjalne rozwiązanie więc raczej wystarczająco bezpieczne  
 znalezc hosting bazy danych 
 dodać na heroku
 * DONE ---------------------------- dodac logowanie googlowskie
