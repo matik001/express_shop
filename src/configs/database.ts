@@ -10,7 +10,6 @@ export const configureDatabase = async ()=>{
 
     const entitiesPath = join(__dirname, `../**/*.entity{.ts,.js}`);
     const migrationsPath = join(__dirname, `../**/migration/*{.ts,.js}`);
-    console.log(entitiesPath)
 
     const baseConnectionOpts = await getConnectionOptions();
 

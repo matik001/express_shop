@@ -5,7 +5,6 @@
             const itemImage = document.querySelector('.poster');
             inputImage.onchange = evt => {
                 const [file] = inputImage.files
-                console.log(inputImage.files)
                 if (file) {
                     itemImage.src = URL.createObjectURL(file)
                 }

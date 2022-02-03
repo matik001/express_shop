@@ -40,6 +40,7 @@ import passportConfig from "./configs/passport";
 import flash from 'connect-flash'
 
 
+console.log(`Running in ${ENV_KEYS.IS_PRODUCTION ? 'production' : 'development'}`);
 
 const app = express();
 
@@ -76,7 +77,7 @@ app.use(catch500);
 const start = async ()=>{
   try {
     await configureDatabase();
-    app.listen(3000);
+    app.listen(ENV_KEYS.PORT);
   } catch (error) {
     console.log(error);    
   }
