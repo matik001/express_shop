@@ -1,10 +1,3 @@
-Trzeba utworzyć plik .env z:
-SESSION_SECRET
-
-ormconfig.json zawiera dane do bazy danych
-
-
-
 
 
 

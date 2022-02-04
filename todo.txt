@@ -3,12 +3,12 @@ poprawić wygląd np. przycisk dodania do koszyku bez nazwy, wiekszy
 * DONE ----------------------------naprawic edycje przedmiotu
 zarządznie profilem
 zarzadzanie adresami
-sprawdzic czy wylapywane sa bledy przez 500
+* DONE ---------------------------- sprawdzic czy wylapywane sa bledy przez 500
 zabezpieczenie przed ddosem
 
 * DONE ---------------------------- sprawdzic czy typeorm LIKE zabezpiecza przed sql injection, nie zastępuje % jednak jest to oficjalne rozwiązanie więc raczej wystarczająco bezpieczne  
-znalezc hosting bazy danych 
-dodać na heroku
+* DONE ---------------------------- znalezc hosting bazy danych 
+* DONE ---------------------------- dodać na heroku
 * DONE ---------------------------- dodac logowanie googlowskie
 dodac role super user, ktorzy zarzadza wszystkimi userami i wybiera adminow
 dodac opcje blokowania userów
