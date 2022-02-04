@@ -10,7 +10,7 @@ import { getValidationErrors, renderHelper } from "../utils/responseHelpers";
 
 
 export const getIndex = async (req: Request, res: Response, next: NextFunction) => {
-    const phrase = req.query['phrase'] ?? '';
+    const phrase = req.query['phrase'] as string ?? '';
     const myItems = await getDb().getRepository(Item).find({
         where:[{
             deleted: false,
@@ -28,6 +28,7 @@ export const getIndex = async (req: Request, res: Response, next: NextFunction) 
     renderHelper(req, res, 'admin/myItems',{
         title: "My items",
         items: myItems,
+        phrase: phrase
     });
 };
 

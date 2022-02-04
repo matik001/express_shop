@@ -51,7 +51,6 @@ export const getCart = async (req: Request, res: Response, next: NextFunction) =
             title: "Empty cart",
         });    
     }
-    /// TODO remove items with deleted flag from cart
     renderHelper(req, res, 'user/cart',{
         title: "Cart",
         cartItems: cartItems,
@@ -185,7 +184,7 @@ export const postCheckout = async (req: Request, res: Response, next: NextFuncti
 
     await getDb().getRepository(Order).save(newOrder);
     await getDb().manager.remove(cartItems);
-    res.redirect('/orders'); /// TODO order id
+    res.redirect('/orders');
 };
 
 

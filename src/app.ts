@@ -14,11 +14,12 @@ declare global {
 }
 // declare namespace Express {
 //   export interface User extends AppUser {}
-//   interface Request {
+//   export interface Request {
 //     user?: User;
 //   }
 // }
 
+/// nodemon z ts-node się czasami buguje przy przeładowaniu, bo passportjs wprowadza swój typ User do Request, wtedy trzeba powyższy blok zakomentować i po chwili odkomentować
 
 import bodyParser from 'body-parser';
 import session from 'express-session';
