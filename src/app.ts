@@ -49,7 +49,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 configureHandlebars(app);
 
 app.set('views', './views');
-app.use('/images', express.static('./upload/images'));
+app.use('/upload/images', express.static('./upload/images'));
 app.use(express.static('./static'));
 app.use(cookieParser());
 

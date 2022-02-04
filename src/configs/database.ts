@@ -28,9 +28,6 @@ export const configureDatabase = async ()=>{
         ],
         synchronize: false,
         logging: false,
-        extra: {
-            ssl: true
-        }
     });
     await seedRoles();
     console.log("Connected to database");
