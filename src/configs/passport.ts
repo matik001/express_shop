@@ -7,6 +7,7 @@ import { getDb } from './database';
 import { User } from '../entity/user.entity';
 import bcrypt from 'bcrypt';
 import ENV_KEYS from './envKeys';
+import { genRandomStrongPassword } from '../utils/passwordEncryptHelper';
 const passportConfig = (app: express.Express) => {
     ///// --------------------- LOCAL STRATEGY ---------------------
     passport.use(new LocalStrategy({
@@ -43,7 +44,7 @@ const passportConfig = (app: express.Express) => {
                     googleId: profile.id,
                     fullname: profile.displayName,
                     email: profile.emails![0].value,
-                    password: Math.random().toString(36).substring(2, 20),
+                    password: await genRandomStrongPassword(),
                 } as User;
                 await repo.save(user);
             }
@@ -71,7 +72,7 @@ const passportConfig = (app: express.Express) => {
                 facebookId: profile.id,
                 fullname: profile.displayName,
                 email: profile.emails![0].value,
-                password: Math.random().toString(36).substring(2, 20),
+                password: await genRandomStrongPassword(),
             } as User;
             await repo.save(user);
         }

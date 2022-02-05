@@ -12,6 +12,7 @@ declare global {
     }
   }
 }
+
 // declare namespace Express {
 //   export interface User extends AppUser {}
 //   export interface Request {

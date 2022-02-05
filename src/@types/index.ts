@@ -1,5 +1,5 @@
-// import {User as AppUser} from './entity/user';
-// import express, {Express, Request} from 'express';
+import {User as AppUser} from '../entity/user.entity';
+import express, {Express, Request} from 'express';
 
 // declare global {
 //   namespace Express {
@@ -7,6 +7,12 @@
 //     interface Request {
 //       user?: User
 //     }
+//   }
+// }
+// declare namespace Express {
+//   export interface User extends AppUser {}
+//   export interface Request {
+//     user?: User;
 //   }
 // }
 

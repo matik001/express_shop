@@ -1,5 +1,4 @@
 pagination
-poprawić wygląd np. przycisk dodania do koszyku bez nazwy, wiekszy
 * DONE ----------------------------naprawic edycje przedmiotu
 zarządznie profilem
 zarzadzanie adresami
@@ -23,12 +22,13 @@ dodac cart dla niezalogowanych
 
 * DONE ---------------------------- edycja itemu ma tworzyc nową kopie, bo moze byc w orderach
 
-* DONE ----------------------------lepsza strona not found
+* DONE ---------------------------- lepsza strona not found
 
-poprawic wyglad orderow
+* DONE ---------------------------- poprawic wyglad orderow
 
 
-haslo zawsze zahaszowane takze przy google
+
+* DONE ---------------------------- haslo zawsze zahaszowane takze przy google i facebook
 
 wiele opcji dostaw, każda z osobną ceną
 
@@ -44,7 +44,8 @@ zamowieinie rozbic na wiele roznych od tych samych dostawcow
 * DONE ---------------------------- zabezpiecznie przed wyslaniem pustych formularzy, lub z blednymi danymi
 zabezpiecznie czy na pewno dany produkt/zamowienie itp nalezy do osoby ktora cos z tym robi
 
----- naprawic menu przy zwijaniu
+* DONE ----------------------------  naprawic menu przy zwijaniu
+* DONE ----------------------------  gdy user nie jest zalogowany jest przycisk dodania do koszyka, naprawic go
 
 dodac allegro api do scrapowania produktow
 

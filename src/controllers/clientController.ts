@@ -59,7 +59,12 @@ export const getCart = async (req: Request, res: Response, next: NextFunction) =
 };
 export const postAddToCart = async (req: Request, res: Response, next: NextFunction) => {
     const id =  req.params.productId;
-    const item = await getDb().getRepository(Item).findOne(id);
+    const item = await getDb().getRepository(Item).findOne({
+        where:{
+            id: id,
+            deleted: false,
+        }
+    });
     if(!item){
         console.log("ERROR: product not found");
         res.redirect('/');
@@ -158,7 +163,6 @@ export const postCheckout = async (req: Request, res: Response, next: NextFuncti
     }
     if(!address){
         res.locals.oldInput = req.body;
-        /// message 
         return next();
     }
     const cartItems = await getDb().getRepository(CartItem).find({
@@ -256,7 +260,7 @@ export const postChangeCartAmount = async (req: Request, res: Response, next: Ne
     cartItem.amount = amount;
     await getDb().getRepository(CartItem).save(cartItem);
 
-    res.redirect('/cart'); /// TODO order id
+    res.redirect('/cart');
 };
 
 

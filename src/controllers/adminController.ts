@@ -14,12 +14,12 @@ export const getIndex = async (req: Request, res: Response, next: NextFunction) 
     const myItems = await getDb().getRepository(Item).find({
         where:[{
             deleted: false,
-            owner: req.user,
+            // owner: req.user,
             name: Like(`%${phrase}%`)
         },
         {
             deleted: false,
-            owner: req.user,
+            // owner: req.user,
             description: Like(`%${phrase}%`)
         }],
         relations: ['owner']
@@ -70,7 +70,7 @@ export const postDeleteItem = async (req: Request, res: Response, next: NextFunc
     const itemId = parseInt(req.params.itemId);
     const item = await getDb().getRepository(Item).findOne({
         id: itemId,
-        owner: req.user
+        // owner: req.user
     })
     if(!item)
         return res.redirect('/admin')
@@ -94,7 +94,10 @@ export const postDeleteItem = async (req: Request, res: Response, next: NextFunc
 
 export const getEditItem = async (req: Request, res: Response, next: NextFunction) => {
     const itemId = parseInt(req.params.itemId);
-    const item = await getDb().getRepository(Item).findOne({id: itemId, owner: req.user})
+    const item = await getDb().getRepository(Item).findOne({
+        id: itemId, 
+        // owner: req.user
+    })
     
     
     if(!item)
@@ -116,7 +119,11 @@ export const postEditItem = async (req: Request, res: Response, next: NextFuncti
     }
 
     const itemId = parseInt(req.params.itemId);
-    const item = await getDb().getRepository(Item).findOne({id: itemId, owner: req.user, deleted: false})
+    const item = await getDb().getRepository(Item).findOne({
+        id: itemId, 
+        // owner: req.user, 
+        deleted: false
+    })
    
     const {price, name, description} = req.body;
     const imageUrl = req.file?.path ? '/'+req.file?.path : null;
@@ -155,7 +162,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 export const getOrders = async (req: Request, res: Response, next: NextFunction) => {
     const orders = await getDb().getRepository(Order).find({
         where:{
-            seller: req.user,
+            // seller: req.user,
             
         },
         relations: [
@@ -176,7 +183,7 @@ export const getOrder = async (req: Request, res: Response, next: NextFunction) 
     const order = await getDb().getRepository(Order).findOne({
         where:{
             id: orderId,
-            seller: req.user,
+            // seller: req.user,
         },
         relations: [
             'address',
@@ -206,7 +213,7 @@ export const postMarkSentOrder = async (req: Request, res: Response, next: NextF
     const order = await getDb().getRepository(Order).findOne({
         where:{
             id: orderId,
-            seller: req.user,
+            // seller: req.user,
         },
     })
     if(!order || order.status != OrderStatuses.ORDERED){

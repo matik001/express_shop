@@ -1,26 +1,37 @@
 {{#section 'head'}}
-    <style>
-        .container{
-            width: 80%;
-            display: flex;
-        }      
-        .item{
-            margin: 30px;
-        }  
+<style>
+  .orders-container {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    padding: 30px;
+  }
 
+  .item {
+    margin: 30px;
+  }
 </style>
 {{/section}}
 
 
-{{#each orders}}
-<div class="card {{orderStatusToClasses status}} mb-3" style="width: 600px;">
-  <div class="card-header">Order #{{id}} - {{status}}</div>
-  <div class="card-body">
-    <p class="card-text">Date: {{formatDate date}}</p>
-    <p class="card-text">Address: {{address}}</p>
-    {{!-- <p class="card-text">Seller: {{address}}</p> --}}
-    <h5 class="card-title">Total price: {{formatPrice totalPrice}}</h5>
-    <a href="/admin/manage-order/{{id}}" class="float-right"><button class="btn btn-dark">Details</button></a>
+<div class="orders-container mt-3">
+  <h1 class="text-center">Manage orders</h1>
+  <hr />
+
+  {{#each orders}}
+  <div class="card {{orderStatusToClasses status}} mb-3 ml-auto mr-auto" style="width: 600px;">
+    <div class="card-header">Order #{{id}} - {{status}}</div>
+    <div class="card-body">
+      <p class="card-text">Date: {{formatDate date}}</p>
+      <p class="card-text">Address: {{address}}</p>
+      {{!-- <p class="card-text">Seller: {{address}}</p> --}}
+      <h5 class="card-title">Total price: {{formatPrice totalPrice}}</h5>
+      <a href="/admin/manage-order/{{id}}" class="float-right"><button class="btn btn-dark">
+          <i class="bi bi-file-text"></i>
+
+          Manage</button></a>
+    </div>
   </div>
+  {{/each}}
 </div>
-{{/each}}

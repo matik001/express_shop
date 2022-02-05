@@ -5,6 +5,7 @@ import { getValidationErrors, renderHelper } from "../utils/responseHelpers";
 import bcrypt from 'bcrypt';
 import session from "express-session";
 import passport from "passport";
+import { hashPassword } from "../utils/passwordEncryptHelper";
 
 export const getLogin = async (req: Request, res: Response, next: NextFunction) => {
     renderHelper(req, res, 'login',{
@@ -62,12 +63,10 @@ export const postRegister = async (req: Request, res: Response, next: NextFuncti
     }
 
     
-    const salt = await bcrypt.genSalt(10);
-
     const user =  {
         email: email,
         fullname: fullname,
-        password: await bcrypt.hash(password, salt)
+        password: await hashPassword(password)
 
    } as User;
     await getDb().getRepository(User).save(user);
