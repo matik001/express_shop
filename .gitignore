@@ -9,3 +9,4 @@ images/*
 dist
 .envDev
 /upload/images/*
+/sessions/*
