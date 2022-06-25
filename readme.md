@@ -5,7 +5,13 @@ Jest to sklep internetowy napisany w express.js. Użytkownik może wybrać produ
 Adnimistrator dodawać/edytować/usuwać nowe produkty, a także oznaczyć zamówienia jako zrealizowane. 
 
 ### Screeny programu:
-![](screenshots/screenshot1items.png)![](screenshots/screenshot2editing.png)![](screenshots/screenshot3cart.png)![](screenshots/screenshot4checkout.png)![](screenshots/screenshot5orderinfo.png)![](screenshots/screenshot6userlist.png)![](screenshots/screenshot7marksent.png)
+![](screenshots/screenshot1items.png)
+![](screenshots/screenshot2editing.png)
+![](screenshots/screenshot3cart.png)
+![](screenshots/screenshot4checkout.png)
+<!-- ![](screenshots/screenshot5orderinfo.png) -->
+![](screenshots/screenshot6userlist.png)
+![](screenshots/screenshot7marksent.png)
 ### Jak uruchomić:
 1) Pobranie zależności:
     > npm install
