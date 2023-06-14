@@ -1,0 +1,36 @@
+version: 2.1
+jobs:
+  deploy:
+    docker:
+      - image: cimg/node:18.16
+    steps:
+      - run: sudo apt update
+      - run: sudo apt-get install rsync
+      # adds ssh keys from circleci
+      - add_ssh_keys
+      # copies files from repo to pipeline
+      - checkout
+      # copies files from pipeline to vps via ssh
+      - run: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete . $VPS_USER@$VPS_URL:~/projects/supershop
+      - run: >
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL "
+            export PORT=$PORT ;
+            export URL=$URL ; 
+            export SESSION_SECRET=$SESSION_SECRET ;
+            export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID ;
+            export GOOGLE_SECRET=$GOOGLE_SECRET ;
+            export FACEBOOK_CLIENT_ID=$FACEBOOK_CLIENT_ID ;
+            export FACEBOOK_CLIENT_SECRET=$FACEBOOK_CLIENT_SECRET ;
+            export TYPEORM_CONNECTION=$TYPEORM_CONNECTION ;
+            export TYPEORM_HOST=$TYPEORM_HOST ;
+            export TYPEORM_USERNAME=$TYPEORM_USERNAME ;
+            export TYPEORM_PASSWORD=$TYPEORM_PASSWORD ;
+            export TYPEORM_DATABASE=$TYPEORM_DATABASE ;
+            export TYPEORM_PORT=$TYPEORM_PORT ;
+
+            cd ~/projects/supershop ;
+            docker compose -f docker-compose.prod.yaml up --build -d"
+workflows:
+  build-and-deploy:
+    jobs:
+      - deploy
