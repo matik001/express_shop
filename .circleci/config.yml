@@ -11,7 +11,7 @@ jobs:
       # copies files from repo to pipeline
       - checkout
       # copies files from pipeline to vps via ssh
-      - run: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete . $VPS_USER@$VPS_URL:~/projects/supershop
+      - run: rsync -e "ssh -o StrictHostKeyChecking=no" -arvc --delete . $VPS_USER@$VPS_URL:~/projects/supershop/repo
       - run: >
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_URL "
             export PORT=$PORT ;
@@ -28,7 +28,7 @@ jobs:
             export TYPEORM_DATABASE=$TYPEORM_DATABASE ;
             export TYPEORM_PORT=$TYPEORM_PORT ;
 
-            cd ~/projects/supershop ;
+            cd ~/projects/supershop/repo ;
             docker compose -f docker-compose.prod.yaml up --build -d"
 workflows:
   build-and-deploy:
