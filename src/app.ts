@@ -62,7 +62,7 @@ app.use(
     secret: ENV_KEYS.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: false },
   })
 );
 app.use(flash());
